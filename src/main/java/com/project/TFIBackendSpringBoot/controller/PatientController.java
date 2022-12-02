@@ -2,6 +2,7 @@ package com.project.TFIBackendSpringBoot.controller;
 
 
 import com.project.TFIBackendSpringBoot.dto.PatientDTO;
+import com.project.TFIBackendSpringBoot.dto.PatientDTOSave;
 import com.project.TFIBackendSpringBoot.model.Patient;
 import com.project.TFIBackendSpringBoot.service.PatientServiceImpl;
 import lombok.AllArgsConstructor;
@@ -53,9 +54,9 @@ public class PatientController {
     }
 
     @PostMapping("/save")
-    public String save(@RequestBody PatientDTO patientDTO){
+    public String save(@RequestBody PatientDTOSave patientDTOSave){
 
-        patientService.save(patientDTO);
+        patientService.save(patientDTOSave);
         return "Patient saved SUCCESFULLY!";
 
     }

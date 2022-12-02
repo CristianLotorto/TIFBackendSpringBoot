@@ -2,6 +2,7 @@ package com.project.TFIBackendSpringBoot.controller;
 
 
 import com.project.TFIBackendSpringBoot.dto.AppointmentDTO;
+import com.project.TFIBackendSpringBoot.dto.AppointmentDTOSave;
 import com.project.TFIBackendSpringBoot.model.Appointment;
 import com.project.TFIBackendSpringBoot.service.AppointmentServiceImpl;
 import lombok.AllArgsConstructor;
@@ -53,9 +54,9 @@ public class AppointmentController {
     }
 
     @PostMapping("/save")
-    public String save(@RequestBody AppointmentDTO appointmentDTO){
+    public String save(@RequestBody AppointmentDTOSave appointmentDTOSave){
 
-       appointmentService.save(appointmentDTO);
+       appointmentService.save(appointmentDTOSave);
        return "Appointment saved SUCCESFULLY!";
 
     }

@@ -2,6 +2,7 @@ package com.project.TFIBackendSpringBoot.controller;
 
 
 import com.project.TFIBackendSpringBoot.dto.DentistDTO;
+import com.project.TFIBackendSpringBoot.dto.DentistDTOSave;
 import com.project.TFIBackendSpringBoot.model.Dentist;
 import com.project.TFIBackendSpringBoot.service.DentistServiceImpl;
 import org.springframework.http.HttpStatus;
@@ -51,9 +52,9 @@ public class DentistController {
     }
 
     @PostMapping("/save")
-    public String save(@RequestBody DentistDTO dentistDTO){
+    public String save(@RequestBody DentistDTOSave dentistDTOSave){
 
-        dentistService.save(dentistDTO);
+        dentistService.save(dentistDTOSave);
         return "Dentist saved SUCCESFULLY!";
 
     }

@@ -2,6 +2,7 @@ package com.project.TFIBackendSpringBoot.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.TFIBackendSpringBoot.dto.DentistDTO;
+import com.project.TFIBackendSpringBoot.dto.DentistDTOSave;
 import com.project.TFIBackendSpringBoot.model.Dentist;
 import com.project.TFIBackendSpringBoot.repository.IDentistRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +14,7 @@ import java.util.List;
 import java.util.Set;
 
 @Service
-public class DentistServiceImpl implements InterfaceService<DentistDTO> {
+public class DentistServiceImpl implements InterfaceService<DentistDTO, DentistDTOSave> {
 
        private IDentistRepository dentistRepository;
 
@@ -25,15 +26,15 @@ public class DentistServiceImpl implements InterfaceService<DentistDTO> {
        @Autowired
        ObjectMapper mapper;
 
-       public void saveDentist(DentistDTO dentistDTO){
-              Dentist dentist=mapper.convertValue(dentistDTO, Dentist.class);
+       public void saveDentist(DentistDTOSave dentistDTOSave){
+              Dentist dentist=mapper.convertValue(dentistDTOSave, Dentist.class);
 
               dentistRepository.save(dentist);
        }
 
        @Override
-       public void save(DentistDTO dentistDTO) {
-              saveDentist(dentistDTO);
+       public void save(DentistDTOSave dentistDTOSave) {
+              saveDentist(dentistDTOSave);
        }
 
        @Override
@@ -66,7 +67,7 @@ public class DentistServiceImpl implements InterfaceService<DentistDTO> {
        }
 
        @Override
-       public void modify(DentistDTO dentistDTO) {
-              saveDentist(dentistDTO);
+       public void modify(DentistDTOSave dentistDTOSave) {
+              saveDentist(dentistDTOSave);
        }
 }

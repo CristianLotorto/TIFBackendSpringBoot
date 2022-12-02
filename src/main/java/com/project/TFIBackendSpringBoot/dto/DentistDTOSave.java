@@ -16,6 +16,7 @@ public class DentistDTOSave {
     private Long id;
     private String name;
     private String lastName;
+    private String license;
     private Set<Appointment> appointments= new HashSet<>();
     private String role;
 }

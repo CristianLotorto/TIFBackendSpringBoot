@@ -4,6 +4,7 @@ package com.project.TFIBackendSpringBoot.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.TFIBackendSpringBoot.dto.AppointmentDTO;
+import com.project.TFIBackendSpringBoot.dto.AppointmentDTOSave;
 import com.project.TFIBackendSpringBoot.model.Appointment;
 import com.project.TFIBackendSpringBoot.repository.IAppointmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +13,7 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 
 @Service
-public class AppointmentServiceImpl implements InterfaceService<AppointmentDTO>{
+public class AppointmentServiceImpl implements InterfaceService<AppointmentDTO, AppointmentDTOSave>{
 
     private IAppointmentRepository appointmentRepository;
     private DentistServiceImpl dentistService;
@@ -30,15 +31,17 @@ public class AppointmentServiceImpl implements InterfaceService<AppointmentDTO>{
     private ObjectMapper mapper;
 
 
-    public void saveAppointment(AppointmentDTO appointmentDTO){
-        Appointment appointment=mapper.convertValue(appointmentDTO, Appointment.class);
+    public void saveAppointment(AppointmentDTOSave appointmentDTOSave){
+        Appointment appointment=mapper.convertValue(appointmentDTOSave, Appointment.class);
 
         appointmentRepository.save(appointment);
     }
 
     @Override
-    public void save(AppointmentDTO appointmentDTO) {
-        appointmentRepository.save(appointmentDTO);
+    public void save(AppointmentDTOSave appointmentDTOSave) {
+
+        saveAppointment(appointmentDTOSave);
+
     }
 
 
@@ -82,7 +85,7 @@ public class AppointmentServiceImpl implements InterfaceService<AppointmentDTO>{
     }
 
     @Override
-    public void modify(AppointmentDTO appointmentDTO) {
-        saveAppointment(new AppointmentDTO());
+    public void modify(AppointmentDTOSave appointmentDTOSave) {
+        saveAppointment(appointmentDTOSave);
     }
 }
