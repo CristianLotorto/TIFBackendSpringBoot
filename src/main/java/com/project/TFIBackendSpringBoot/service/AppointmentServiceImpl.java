@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 
 @Service
-public class AppointmentServiceImpl implements InterfaceService<AppointmentDTO,Appointment>{
+public class AppointmentServiceImpl implements InterfaceService<AppointmentDTO>{
 
     private IAppointmentRepository appointmentRepository;
     private DentistServiceImpl dentistService;
@@ -30,13 +30,15 @@ public class AppointmentServiceImpl implements InterfaceService<AppointmentDTO,A
     private ObjectMapper mapper;
 
 
-    public void saveAppointment(Appointment appointment){
+    public void saveAppointment(AppointmentDTO appointmentDTO){
+        Appointment appointment=mapper.convertValue(appointmentDTO, Appointment.class);
+
         appointmentRepository.save(appointment);
     }
 
     @Override
-    public void save(Appointment appointment) {
-        appointmentRepository.save(appointment);
+    public void save(AppointmentDTO appointmentDTO) {
+        appointmentRepository.save(appointmentDTO);
     }
 
 
@@ -80,7 +82,7 @@ public class AppointmentServiceImpl implements InterfaceService<AppointmentDTO,A
     }
 
     @Override
-    public void modify(Appointment appointment) {
-        saveAppointment(appointment);
+    public void modify(AppointmentDTO appointmentDTO) {
+        saveAppointment(new AppointmentDTO());
     }
 }

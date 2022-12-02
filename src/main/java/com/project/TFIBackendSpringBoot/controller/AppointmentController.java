@@ -53,9 +53,9 @@ public class AppointmentController {
     }
 
     @PostMapping("/save")
-    public String save(@RequestBody Appointment appointment){
+    public String save(@RequestBody AppointmentDTO appointmentDTO){
 
-       appointmentService.save(appointment);
+       appointmentService.save(appointmentDTO);
        return "Appointment saved SUCCESFULLY!";
 
     }

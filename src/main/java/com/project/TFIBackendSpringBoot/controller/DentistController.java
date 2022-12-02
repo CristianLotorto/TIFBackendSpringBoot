@@ -51,9 +51,9 @@ public class DentistController {
     }
 
     @PostMapping("/save")
-    public String save(@RequestBody Dentist dentist){
+    public String save(@RequestBody DentistDTO dentistDTO){
 
-        dentistService.save(dentist);
+        dentistService.save(dentistDTO);
         return "Dentist saved SUCCESFULLY!";
 
     }

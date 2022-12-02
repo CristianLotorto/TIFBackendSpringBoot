@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Set;
 
 @Service
-public class DentistServiceImpl implements InterfaceService<DentistDTO,Dentist> {
+public class DentistServiceImpl implements InterfaceService<DentistDTO> {
 
        private IDentistRepository dentistRepository;
 
@@ -25,13 +25,15 @@ public class DentistServiceImpl implements InterfaceService<DentistDTO,Dentist> 
        @Autowired
        ObjectMapper mapper;
 
-       public void saveDentist(Dentist dentist){
+       public void saveDentist(DentistDTO dentistDTO){
+              Dentist dentist=mapper.convertValue(dentistDTO, Dentist.class);
+
               dentistRepository.save(dentist);
        }
 
        @Override
-       public void save(Dentist dentist) {
-              saveDentist(dentist);
+       public void save(DentistDTO dentistDTO) {
+              saveDentist(dentistDTO);
        }
 
        @Override
@@ -64,7 +66,7 @@ public class DentistServiceImpl implements InterfaceService<DentistDTO,Dentist> 
        }
 
        @Override
-       public void modify(Dentist dentist) {
-              saveDentist(dentist);
+       public void modify(DentistDTO dentistDTO) {
+              saveDentist(dentistDTO);
        }
 }
