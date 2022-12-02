@@ -1,7 +1,6 @@
 package com.project.TFIBackendSpringBoot.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.project.TFIBackendSpringBoot.dto.AppointmentDTO;
 import com.project.TFIBackendSpringBoot.dto.DentistDTO;
 import com.project.TFIBackendSpringBoot.model.Dentist;
 import com.project.TFIBackendSpringBoot.repository.IDentistRepository;
