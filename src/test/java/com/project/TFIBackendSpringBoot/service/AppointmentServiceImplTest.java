@@ -2,7 +2,9 @@ package com.project.TFIBackendSpringBoot.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.TFIBackendSpringBoot.dto.AppointmentDTO;
-import com.project.TFIBackendSpringBoot.model.Appointment;
+import com.project.TFIBackendSpringBoot.dto.AppointmentDTOSave;
+import com.project.TFIBackendSpringBoot.dto.DentistDTOSave;
+import com.project.TFIBackendSpringBoot.dto.PatientDTOSave;
 import com.project.TFIBackendSpringBoot.model.Dentist;
 import com.project.TFIBackendSpringBoot.model.Patient;
 import org.junit.jupiter.api.MethodOrderer;
@@ -14,7 +16,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.sql.Date;
 import java.sql.Time;
-import java.util.HashSet;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -25,7 +26,6 @@ class AppointmentServiceImplTest {
     private DentistServiceImpl dentistService;
     private PatientServiceImpl patientService;
     private AppointmentServiceImpl appointmentService;
-
 
     @Autowired
     public AppointmentServiceImplTest(AppointmentServiceImpl appointmentService, DentistServiceImpl dentistService, PatientServiceImpl patientService){
@@ -38,35 +38,35 @@ class AppointmentServiceImplTest {
     @Test
     @Order(1)
     void save() {
-        Dentist dentist=new Dentist();
-        dentist.setName("Bob");
-        dentist.setLastName("Tomasson");
-        dentist.setLicense("4-12356-6434");
-        dentist.setRole("user");
+        DentistDTOSave dentistDTOSave=new DentistDTOSave();
+        dentistDTOSave.setName("Bob");
+        dentistDTOSave.setLastName("Tomasson");
+        dentistDTOSave.setLicense("4-12356-6434");
+        dentistDTOSave.setRole("user");
 
-        dentistService.save(dentist);
+        dentistService.save(dentistDTOSave);
 
-        Patient patient=new Patient();
-        patient.setName("Charles");
-        patient.setLastName("Bronson");
-        patient.setDNI("41235664");
-        patient.setAddress("FifaStreet 1613");
-        patient.setDischargedDate(new Date(2022,9,7));
-        patient.setRole("user");
+        PatientDTOSave patientDTOSave=new PatientDTOSave();
+        patientDTOSave.setName("Charles");
+        patientDTOSave.setLastName("Bronson");
+        patientDTOSave.setDNI("41235664");
+        patientDTOSave.setAddress("FifaStreet 1613");
+        patientDTOSave.setDischargedDate(new Date(2022,9,7));
+        patientDTOSave.setRole("user");
 
-        patientService.save(patient);
+        patientService.save(patientDTOSave);
         ObjectMapper mapper=new ObjectMapper();
 
-        Dentist realDentist=mapper.convertValue(dentistService.search(1L),Dentist.class);
-        Patient realPatient=mapper.convertValue(patientService.search(2L),Patient.class);
+        Dentist dentistEntity=mapper.convertValue(dentistService.search("4-12356-6434"),Dentist.class);
+        Patient patientEntity=mapper.convertValue(patientService.search("41235664"),Patient.class);
 
-        Appointment appointment=new Appointment();
-        appointment.setDentist(realDentist);
-        appointment.setPatient(realPatient);
-        appointment.setAppointmentDate(new Date(122,9,5));
-        appointment.setAppointmentTime(new Time(15,25,00));
+        AppointmentDTOSave appointmentDTOSave=new AppointmentDTOSave();
+        appointmentDTOSave.setDentist(dentistEntity);
+        appointmentDTOSave.setPatient(patientEntity);
+        appointmentDTOSave.setAppointmentDate(new Date(122,9,5));
+        appointmentDTOSave.setAppointmentTime(new Time(15,25,00));
 
-        appointmentService.save(appointment);
+        appointmentService.save(appointmentDTOSave);
 
         AppointmentDTO appointmentSearch=appointmentService.search(3L);
 
@@ -77,74 +77,74 @@ class AppointmentServiceImplTest {
     @Test
     @Order(2)
     void search() {
-        Dentist dentist=new Dentist();
-        dentist.setName("Bob");
-        dentist.setLastName("Tomasson");
-        dentist.setLicense("4-12356-6434");
-        dentist.setRole("user");
+        DentistDTOSave dentistDTOSave=new DentistDTOSave();
+        dentistDTOSave.setName("Bob");
+        dentistDTOSave.setLastName("Tomasson");
+        dentistDTOSave.setLicense("4-12356-6434");
+        dentistDTOSave.setRole("user");
 
-        dentistService.save(dentist);
+        dentistService.save(dentistDTOSave);
 
-        Patient patient=new Patient();
-        patient.setName("Charles");
-        patient.setLastName("Bronson");
-        patient.setDNI("41235664");
-        patient.setAddress("FifaStreet 1613");
-        patient.setDischargedDate(new Date(2022,9,7));
-        patient.setRole("user");
+        PatientDTOSave patientDTOSave=new PatientDTOSave();
+        patientDTOSave.setName("Charles");
+        patientDTOSave.setLastName("Bronson");
+        patientDTOSave.setDNI("41235664");
+        patientDTOSave.setAddress("FifaStreet 1613");
+        patientDTOSave.setDischargedDate(new Date(2022,9,7));
+        patientDTOSave.setRole("user");
 
-        patientService.save(patient);
+        patientService.save(patientDTOSave);
         ObjectMapper mapper=new ObjectMapper();
 
-        Dentist realDentist=mapper.convertValue(dentistService.search(1L),Dentist.class);
-        Patient realPatient=mapper.convertValue(patientService.search(2L),Patient.class);
+        Dentist dentistEntity=mapper.convertValue(dentistService.search("4-12356-6434"),Dentist.class);
+        Patient patientEntity=mapper.convertValue(patientService.search("41235664"),Patient.class);
 
-        Appointment appointment=new Appointment();
-        appointment.setDentist(realDentist);
-        appointment.setPatient(realPatient);
-        appointment.setAppointmentDate(new Date(122,9,5));
-        appointment.setAppointmentTime(new Time(15,25,00));
+        AppointmentDTOSave appointmentDTOSave=new AppointmentDTOSave();
+        appointmentDTOSave.setDentist(dentistEntity);
+        appointmentDTOSave.setPatient(patientEntity);
+        appointmentDTOSave.setAppointmentDate(new Date(122,9,5));
+        appointmentDTOSave.setAppointmentTime(new Time(15,25,00));
 
-        appointmentService.save(appointment);
+        appointmentService.save(appointmentDTOSave);
 
-        Long id=3L;
+        String patientName="Charles";
         AppointmentDTO appointmentSearch=appointmentService.search(3L);
 
-        assertEquals(appointmentSearch.getId(),id);
+        assertEquals(appointmentSearch.getPatientDTO().getName(),patientName);
     }
 
     @Test
     @Order(3)
     void searchAll() {
-        Dentist dentist=new Dentist();
-        dentist.setName("Bob");
-        dentist.setLastName("Tomasson");
-        dentist.setLicense("4-12356-6434");
-        dentist.setRole("user");
+        DentistDTOSave dentistDTOSave=new DentistDTOSave();
+        dentistDTOSave.setName("Bob");
+        dentistDTOSave.setLastName("Tomasson");
+        dentistDTOSave.setLicense("4-12356-6434");
+        dentistDTOSave.setRole("user");
 
-        dentistService.save(dentist);
+        dentistService.save(dentistDTOSave);
 
-        Patient patient=new Patient();
-        patient.setName("Charles");
-        patient.setLastName("Bronson");
-        patient.setDNI("41235664");
-        patient.setAddress("FifaStreet 1613");
-        patient.setDischargedDate(new Date(2022,9,7));
-        patient.setRole("user");
+        PatientDTOSave patientDTOSave=new PatientDTOSave();
+        patientDTOSave.setName("Charles");
+        patientDTOSave.setLastName("Bronson");
+        patientDTOSave.setDNI("41235664");
+        patientDTOSave.setAddress("FifaStreet 1613");
+        patientDTOSave.setDischargedDate(new Date(2022,9,7));
+        patientDTOSave.setRole("user");
 
-        patientService.save(patient);
+        patientService.save(patientDTOSave);
         ObjectMapper mapper=new ObjectMapper();
 
-        Dentist realDentist=mapper.convertValue(dentistService.search(1L),Dentist.class);
-        Patient realPatient=mapper.convertValue(patientService.search(2L),Patient.class);
+        Dentist dentistEntity=mapper.convertValue(dentistService.search("4-12356-6434"),Dentist.class);
+        Patient patientEntity=mapper.convertValue(patientService.search("41235664"),Patient.class);
 
-        Appointment appointment=new Appointment();
-        appointment.setDentist(realDentist);
-        appointment.setPatient(realPatient);
-        appointment.setAppointmentDate(new Date(122,9,5));
-        appointment.setAppointmentTime(new Time(15,25,00));
+        AppointmentDTOSave appointmentDTOSave=new AppointmentDTOSave();
+        appointmentDTOSave.setDentist(dentistEntity);
+        appointmentDTOSave.setPatient(patientEntity);
+        appointmentDTOSave.setAppointmentDate(new Date(122,9,5));
+        appointmentDTOSave.setAppointmentTime(new Time(15,25,00));
 
-        appointmentService.save(appointment);
+        appointmentService.save(appointmentDTOSave);
 
         Set<AppointmentDTO> allAppointments=appointmentService.searchAll();
 
@@ -155,88 +155,89 @@ class AppointmentServiceImplTest {
     @Test
     @Order(4)
     void modify() {
-        Dentist dentist=new Dentist();
-        dentist.setName("Bob");
-        dentist.setLastName("Tomasson");
-        dentist.setLicense("4-12356-6434");
-        dentist.setRole("user");
+        DentistDTOSave dentistDTOSave=new DentistDTOSave();
+        dentistDTOSave.setName("Bob");
+        dentistDTOSave.setLastName("Tomasson");
+        dentistDTOSave.setLicense("4-12356-6434");
+        dentistDTOSave.setRole("user");
 
-        dentistService.save(dentist);
+        dentistService.save(dentistDTOSave);
 
-        Patient patient=new Patient();
-        patient.setName("Charles");
-        patient.setLastName("Bronson");
-        patient.setDNI("41235664");
-        patient.setAddress("FifaStreet 1613");
-        patient.setDischargedDate(new Date(2022,9,7));
-        patient.setRole("user");
+        PatientDTOSave patientDTOSave=new PatientDTOSave();
+        patientDTOSave.setName("Charles");
+        patientDTOSave.setLastName("Bronson");
+        patientDTOSave.setDNI("41235664");
+        patientDTOSave.setAddress("FifaStreet 1613");
+        patientDTOSave.setDischargedDate(new Date(2022,9,7));
+        patientDTOSave.setRole("user");
 
-        patientService.save(patient);
+        patientService.save(patientDTOSave);
         ObjectMapper mapper=new ObjectMapper();
 
-        Dentist realDentist=mapper.convertValue(dentistService.search(1L),Dentist.class);
-        Patient realPatient=mapper.convertValue(patientService.search(2L),Patient.class);
+        Dentist dentistEntity=mapper.convertValue(dentistService.search("4-12356-6434"),Dentist.class);
+        Patient patientEntity=mapper.convertValue(patientService.search("41235664"),Patient.class);
 
-        Appointment appointment=new Appointment();
-        appointment.setDentist(realDentist);
-        appointment.setPatient(realPatient);
-        appointment.setAppointmentDate(new Date(122,9,5));
-        appointment.setAppointmentTime(new Time(15,25,00));
+        AppointmentDTOSave appointmentDTOSave=new AppointmentDTOSave();
+        appointmentDTOSave.setDentist(dentistEntity);
+        appointmentDTOSave.setPatient(patientEntity);
+        appointmentDTOSave.setAppointmentDate(new Date(122,9,5));
+        appointmentDTOSave.setAppointmentTime(new Time(15,25,00));
 
-        appointmentService.save(appointment);
+        appointmentService.save(appointmentDTOSave);
 
         AppointmentDTO notModifiedAppointment=appointmentService.search(3L);
 
         Date date=new Date(122,11,9);
         Long id=3L;
-        Appointment appointment2=new Appointment();
-        appointment2.setDentist(realDentist);
-        appointment2.setPatient(realPatient);
-        appointment2.setAppointmentDate(date);
-        appointment2.setAppointmentTime(new Time(15,25,00));
-        appointment2.setId(id);
+        String dentistName="Bob";
+        AppointmentDTOSave appointmentDTOSave2=new AppointmentDTOSave();
+        appointmentDTOSave2.setDentist(dentistEntity);
+        appointmentDTOSave2.setPatient(patientEntity);
+        appointmentDTOSave2.setAppointmentDate(date);
+        appointmentDTOSave2.setAppointmentTime(new Time(15,25,00));
+        appointmentDTOSave2.setId(id);
 
-        appointmentService.modify(appointment2);
+        appointmentService.modify(appointmentDTOSave2);
 
         AppointmentDTO modifiedAppointment= appointmentService.search(3L);
 
         assertNotEquals(modifiedAppointment.getAppointmentDate(),notModifiedAppointment.getAppointmentDate());
         assertEquals(modifiedAppointment.getAppointmentTime(),notModifiedAppointment.getAppointmentTime());
-        assertEquals(modifiedAppointment.getId(),id);
+        assertEquals(modifiedAppointment.getDentistDTO().getName(),dentistName);
     }
 
     @Test
     @Order(5)
     void remove() {
-        Dentist dentist=new Dentist();
-        dentist.setName("Bob");
-        dentist.setLastName("Tomasson");
-        dentist.setLicense("4-12356-6434");
-        dentist.setRole("user");
+        DentistDTOSave dentistDTOSave=new DentistDTOSave();
+        dentistDTOSave.setName("Bob");
+        dentistDTOSave.setLastName("Tomasson");
+        dentistDTOSave.setLicense("4-12356-6434");
+        dentistDTOSave.setRole("user");
 
-        dentistService.save(dentist);
+        dentistService.save(dentistDTOSave);
 
-        Patient patient=new Patient();
-        patient.setName("Charles");
-        patient.setLastName("Bronson");
-        patient.setDNI("41235664");
-        patient.setAddress("FifaStreet 1613");
-        patient.setDischargedDate(new Date(2022,9,7));
-        patient.setRole("user");
+        PatientDTOSave patientDTOSave=new PatientDTOSave();
+        patientDTOSave.setName("Charles");
+        patientDTOSave.setLastName("Bronson");
+        patientDTOSave.setDNI("41235664");
+        patientDTOSave.setAddress("FifaStreet 1613");
+        patientDTOSave.setDischargedDate(new Date(2022,9,7));
+        patientDTOSave.setRole("user");
 
-        patientService.save(patient);
+        patientService.save(patientDTOSave);
         ObjectMapper mapper=new ObjectMapper();
 
-        Dentist realDentist=mapper.convertValue(dentistService.search(1L),Dentist.class);
-        Patient realPatient=mapper.convertValue(patientService.search(2L),Patient.class);
+        Dentist dentistEntity=mapper.convertValue(dentistService.search("4-12356-6434"),Dentist.class);
+        Patient patientEntity=mapper.convertValue(patientService.search("41235664"),Patient.class);
 
-        Appointment appointment=new Appointment();
-        appointment.setDentist(realDentist);
-        appointment.setPatient(realPatient);
-        appointment.setAppointmentDate(new Date(122,9,5));
-        appointment.setAppointmentTime(new Time(15,25,00));
+        AppointmentDTOSave appointmentDTOSave=new AppointmentDTOSave();
+        appointmentDTOSave.setDentist(dentistEntity);
+        appointmentDTOSave.setPatient(patientEntity);
+        appointmentDTOSave.setAppointmentDate(new Date(122,9,5));
+        appointmentDTOSave.setAppointmentTime(new Time(15,25,00));
 
-        appointmentService.save(appointment);
+        appointmentService.save(appointmentDTOSave);
 
         Long id=3L;
 

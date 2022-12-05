@@ -1,8 +1,7 @@
 package com.project.TFIBackendSpringBoot.service;
 
 import com.project.TFIBackendSpringBoot.dto.DentistDTO;
-import com.project.TFIBackendSpringBoot.model.Appointment;
-import com.project.TFIBackendSpringBoot.model.Dentist;
+import com.project.TFIBackendSpringBoot.dto.DentistDTOSave;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -10,7 +9,6 @@ import org.junit.jupiter.api.TestMethodOrder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.util.HashSet;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -29,17 +27,15 @@ class DentistServiceImplTest {
     @Order(1)
     void save() {
 
-        Dentist dentist=new Dentist();
-        Set<Appointment> appointments=new HashSet<>();
-        dentist.setName("Bob");
-        dentist.setLastName("Tomasson");
-        dentist.setLicense("4-12356-6434");
-        dentist.setAppointments(appointments);
-        dentist.setRole("user");
+        DentistDTOSave dentistDTOSave=new DentistDTOSave();
+        dentistDTOSave.setName("Bob");
+        dentistDTOSave.setLastName("Tomasson");
+        dentistDTOSave.setLicense("4-12356-6434");
+        dentistDTOSave.setRole("user");
 
-        dentistService.save(dentist);
+        dentistService.save(dentistDTOSave);
 
-        DentistDTO dentistBob=dentistService.search(1L);
+        DentistDTO dentistBob=dentistService.search("4-12356-6434");
 
         assertNotNull(dentistBob);
 
@@ -48,34 +44,30 @@ class DentistServiceImplTest {
     @Test
     @Order(2)
     void search() {
-        Dentist dentist=new Dentist();
-        Set<Appointment> appointments=new HashSet<>();
-        dentist.setName("Bob");
-        dentist.setLastName("Tomasson");
-        dentist.setLicense("4-12356-6434");
-        dentist.setAppointments(appointments);
-        dentist.setRole("user");
+        DentistDTOSave dentistDTOSave=new DentistDTOSave();
+        dentistDTOSave.setName("Bob");
+        dentistDTOSave.setLastName("Tomasson");
+        dentistDTOSave.setLicense("4-12365-6434");
+        dentistDTOSave.setRole("user");
 
-        dentistService.save(dentist);
+        dentistService.save(dentistDTOSave);
 
-        Long id=1L;
-        DentistDTO dentistBob=dentistService.search(1L);
+        String dentistName="Bob";
+        DentistDTO dentistBob=dentistService.search("4-12365-6434");
 
-        assertEquals(dentistBob.getId(),id);
+        assertEquals(dentistBob.getName(),dentistName);
     }
 
     @Test
     @Order(3)
     void searchAll() {
-        Dentist dentist=new Dentist();
-        Set<Appointment> appointments=new HashSet<>();
-        dentist.setName("Bob");
-        dentist.setLastName("Tomasson");
-        dentist.setLicense("4-12356-6434");
-        dentist.setAppointments(appointments);
-        dentist.setRole("user");
+        DentistDTOSave dentistDTOSave=new DentistDTOSave();
+        dentistDTOSave.setName("Bob");
+        dentistDTOSave.setLastName("Tomasson");
+        dentistDTOSave.setLicense("4-12356-6434");
+        dentistDTOSave.setRole("user");
 
-        dentistService.save(dentist);
+        dentistService.save(dentistDTOSave);
 
         Set<DentistDTO> allDentists=dentistService.searchAll();
 
@@ -86,57 +78,50 @@ class DentistServiceImplTest {
     @Test
     @Order(4)
     void modify() {
-        Dentist dentist=new Dentist();
-        Set<Appointment> appointments=new HashSet<>();
-        dentist.setName("Bob");
-        dentist.setLastName("Tomasson");
-        dentist.setLicense("4-12356-6434");
-        dentist.setAppointments(appointments);
-        dentist.setRole("user");
+        DentistDTOSave dentistDTOSave=new DentistDTOSave();
+        dentistDTOSave.setName("Bob");
+        dentistDTOSave.setLastName("Tomasson");
+        dentistDTOSave.setLicense("4-12356-4643");
+        dentistDTOSave.setRole("user");
 
-        dentistService.save(dentist);
+        dentistService.save(dentistDTOSave);
 
-        DentistDTO notModifiedDentist=dentistService.search(1L);
+        DentistDTO notModifiedDentist=dentistService.search("4-12356-4643");
 
         String name="Timothy";
-        Long id=1L;
-        Dentist dentist2=new Dentist();
-        dentist2.setName(name);
-        dentist2.setLastName("Tomasson");
-        dentist2.setLicense("4-12356-6434");
-        dentist2.setAppointments(appointments);
-        dentist2.setRole("user");
-        dentist2.setId(1L);
+        DentistDTOSave dentistDTOSave2=new DentistDTOSave();
+        dentistDTOSave2.setName(name);
+        dentistDTOSave2.setLastName("Tomasson");
+        dentistDTOSave2.setLicense("4-12356-4643");
+        dentistDTOSave2.setRole("user");
+        dentistDTOSave2.setId(notModifiedDentist.getId());
 
-        dentistService.modify(dentist2);
+        dentistService.modify(dentistDTOSave2);
 
-        DentistDTO modifiedDentist= dentistService.search(1L);
+        DentistDTO modifiedDentist= dentistService.search("4-12356-4643");
 
         assertNotEquals(modifiedDentist.getName(),notModifiedDentist.getName());
         assertEquals(modifiedDentist.getLastName(),notModifiedDentist.getLastName());
-        assertEquals(modifiedDentist.getId(),id);
+        assertEquals(modifiedDentist.getName(),name);
     }
 
     @Test
     @Order(5)
     void remove() {
-        Dentist dentist=new Dentist();
-        Set<Appointment> appointments=new HashSet<>();
-        dentist.setName("Bob");
-        dentist.setLastName("Tomasson");
-        dentist.setLicense("4-12356-6434");
-        dentist.setAppointments(appointments);
-        dentist.setRole("user");
+        DentistDTOSave dentistDTOSave=new DentistDTOSave();
+        dentistDTOSave.setName("Bob");
+        dentistDTOSave.setLastName("Tomasson");
+        dentistDTOSave.setLicense("4-12356-3644");
+        dentistDTOSave.setRole("user");
 
-        dentistService.save(dentist);
+        dentistService.save(dentistDTOSave);
 
-        Long id=1L;
 
-        DentistDTO searchDentist=dentistService.search(id);
+        DentistDTO searchDentist=dentistService.search("4-12356-3644");
 
-        dentistService.remove(id);
+        dentistService.remove(searchDentist.getId());
         assertNotNull(searchDentist);
-        assertNull(dentistService.search(id));
+        assertNull(dentistService.search("4-12356-3644"));
 
     }
 }

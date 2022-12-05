@@ -24,9 +24,9 @@ public class DentistController {
         return "Hello Everyone!";
     }
 
-    @GetMapping("/search/{id}")
-    public ResponseEntity<DentistDTO> search(@PathVariable Long id){
-        DentistDTO dentistDTO= dentistService.search(id);
+    @GetMapping("/search/{license}")
+    public ResponseEntity<DentistDTO> search(@PathVariable String license){
+        DentistDTO dentistDTO= dentistService.search(license);
         ResponseEntity response;
         if(dentistDTO!=null){
             response=ResponseEntity.ok(dentistDTO);
@@ -59,10 +59,10 @@ public class DentistController {
 
     }
 
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<Dentist> delete(@PathVariable Long id){
+    @DeleteMapping("/delete")
+    public ResponseEntity<Dentist> delete(@RequestParam Long id, @RequestParam String license){
         ResponseEntity<Dentist> response;
-        if(dentistService.search(id)==null){
+        if(dentistService.search(license)==null){
             response= new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }else{
             dentistService.remove(id);

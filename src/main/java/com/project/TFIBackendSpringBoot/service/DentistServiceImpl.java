@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.Set;
 
 @Service
-public class DentistServiceImpl implements InterfaceService<DentistDTO, DentistDTOSave> {
+public class DentistServiceImpl implements IDentistService<DentistDTO, DentistDTOSave> {
 
        private IDentistRepository dentistRepository;
 
@@ -38,14 +38,21 @@ public class DentistServiceImpl implements InterfaceService<DentistDTO, DentistD
        }
 
        @Override
-       public void remove(Long id) {
-              dentistRepository.deleteById(id);
+       public void remove(Long id){
+              try{
+                     dentistRepository.deleteById(id);
+
+              }catch (RuntimeException e){
+              System.out.println("Se re picó");
+              System.out.println(e);
+       }
        }
 
        @Override
-       public DentistDTO search(Long id) {
+       public DentistDTO search(String license) {
 
-              Dentist dentist=dentistRepository.findById(id).orElse(null);
+
+              Dentist dentist=dentistRepository.findByLicense(license);
 
               DentistDTO dentistDTO;
 

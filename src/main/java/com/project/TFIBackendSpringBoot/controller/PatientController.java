@@ -26,9 +26,9 @@ public class PatientController {
         return "Hello Everyone!";
     }
 
-    @GetMapping("/search/{id}")
-    public ResponseEntity<PatientDTO> search(@PathVariable Long id){
-        PatientDTO patientDTO= patientService.search(id);
+    @GetMapping("/search/{dni}")
+    public ResponseEntity<PatientDTO> search(@PathVariable String dni){
+        PatientDTO patientDTO= patientService.search(dni);
         ResponseEntity response;
         if(patientDTO!=null){
             response=ResponseEntity.ok(patientDTO);
@@ -61,10 +61,10 @@ public class PatientController {
 
     }
 
-    @DeleteMapping
-    public ResponseEntity<Patient> delete(@PathVariable Long id){
+    @DeleteMapping("/delete")
+    public ResponseEntity<Patient> delete(@RequestParam Long id, @RequestParam String dni){
         ResponseEntity<Patient> response;
-        if(patientService.search(id)==null){
+        if(patientService.search(dni)==null){
             response= new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }else{
             patientService.remove(id);

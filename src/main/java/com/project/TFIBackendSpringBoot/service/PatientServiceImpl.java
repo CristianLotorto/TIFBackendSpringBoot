@@ -15,7 +15,7 @@ import java.util.List;
 import java.util.Set;
 
 @Service
-public class PatientServiceImpl implements InterfaceService<PatientDTO, PatientDTOSave>{
+public class PatientServiceImpl implements IPatientService<PatientDTO, PatientDTOSave> {
 
     private IPatientRepository patientRepository;
 
@@ -40,13 +40,21 @@ public class PatientServiceImpl implements InterfaceService<PatientDTO, PatientD
 
     @Override
     public void remove(Long id) {
+        try{
+
         patientRepository.deleteById(id);
+
+        }catch (RuntimeException e){
+            System.out.println("Errorico");
+            System.out.println(e);
+        }
     }
 
     @Override
-    public PatientDTO search(Long id) {
+    public PatientDTO search(String dni) {
 
-        Patient patient= patientRepository.findById(id).orElse(null);
+
+        Patient patient= patientRepository.findByDNI(dni);
 
         PatientDTO patientDTO=mapper.convertValue(patient, PatientDTO.class);
 

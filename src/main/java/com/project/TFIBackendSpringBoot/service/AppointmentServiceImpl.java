@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 import java.util.*;
 
 @Service
-public class AppointmentServiceImpl implements InterfaceService<AppointmentDTO, AppointmentDTOSave>{
+public class AppointmentServiceImpl implements IAppointmentService<AppointmentDTO, AppointmentDTOSave> {
 
     private IAppointmentRepository appointmentRepository;
     private DentistServiceImpl dentistService;
@@ -35,6 +35,7 @@ public class AppointmentServiceImpl implements InterfaceService<AppointmentDTO, 
         Appointment appointment=mapper.convertValue(appointmentDTOSave, Appointment.class);
 
         appointmentRepository.save(appointment);
+
     }
 
     @Override
@@ -53,15 +54,17 @@ public class AppointmentServiceImpl implements InterfaceService<AppointmentDTO, 
     @Override
     public AppointmentDTO search(Long id) {
 
-        Optional<Appointment> optionalAppointment= appointmentRepository.findById(id);
-
-        Appointment appointment=optionalAppointment.orElse(null);
+        Appointment appointment =appointmentRepository.findById(id).orElse(null);
 
         AppointmentDTO appointmentDTO=mapper.convertValue(appointment,AppointmentDTO.class);
 
-        appointmentDTO.setDentistDTO(dentistService.search(appointment.getDentist().getId()));
-
-        appointmentDTO.setPatientDTO(patientService.search(appointment.getPatient().getId()));
+        try {
+            appointmentDTO.setDentistDTO(dentistService.search(appointment.getDentist().getLicense()));
+            appointmentDTO.setPatientDTO(patientService.search(appointment.getPatient().getDNI()));
+        }catch (RuntimeException e){
+            System.out.println("Error re zarpado");
+            System.out.println(e);
+        }
 
         return appointmentDTO;
     }
@@ -72,11 +75,12 @@ public class AppointmentServiceImpl implements InterfaceService<AppointmentDTO, 
         Set<AppointmentDTO> appointmentsDTO=new HashSet<>();
 
         for (Appointment appointment:appointments) {
+
             AppointmentDTO appointmentDTO=mapper.convertValue(appointment,AppointmentDTO.class);
 
-            appointmentDTO.setDentistDTO(dentistService.search(appointment.getDentist().getId()));
+            appointmentDTO.setDentistDTO(dentistService.search(appointment.getDentist().getLicense()));
 
-            appointmentDTO.setPatientDTO(patientService.search(appointment.getPatient().getId()));
+            appointmentDTO.setPatientDTO(patientService.search(appointment.getPatient().getDNI()));
 
             appointmentsDTO.add(appointmentDTO);
         }

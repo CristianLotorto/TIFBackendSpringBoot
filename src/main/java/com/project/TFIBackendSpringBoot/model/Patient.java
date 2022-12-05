@@ -4,8 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.ToString;
 import lombok.Setter;
+import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
 import java.sql.Date;
@@ -29,7 +29,7 @@ public class Patient{
     @Column(name="dni")
     private String DNI;
     private String address;
-    @OneToMany(mappedBy="patient", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy="patient")
     @JsonIgnore
     private Set<Appointment> appointments= new HashSet<>();
     @Column(name="disch_date")

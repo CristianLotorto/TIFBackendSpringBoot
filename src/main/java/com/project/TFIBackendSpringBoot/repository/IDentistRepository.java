@@ -6,4 +6,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface IDentistRepository extends JpaRepository<Dentist,Long> {
+    Dentist findByLicense(String license);
+
+
 }

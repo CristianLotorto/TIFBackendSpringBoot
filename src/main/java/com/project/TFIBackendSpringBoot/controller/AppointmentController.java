@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.sql.Date;
 import java.util.Set;
 
 @AllArgsConstructor
@@ -25,9 +26,17 @@ public class AppointmentController {
         return "Hello Everyone!";
     }
 
+    @PostMapping("/save")
+    public String save(@RequestBody AppointmentDTOSave appointmentDTOSave){
 
-    @GetMapping("/search/{id}")
-    public ResponseEntity<AppointmentDTO> search(@PathVariable Long id){
+        appointmentService.save(appointmentDTOSave);
+        return "Appointment saved SUCCESFULLY!";
+
+    }
+
+    @GetMapping("/search")
+    @ResponseBody
+    public ResponseEntity<AppointmentDTO> search(@RequestParam Long id){
         AppointmentDTO appointmentDTO= appointmentService.search(id);
         ResponseEntity response;
         if(appointmentDTO!=null){
@@ -53,15 +62,7 @@ public class AppointmentController {
         return response;
     }
 
-    @PostMapping("/save")
-    public String save(@RequestBody AppointmentDTOSave appointmentDTOSave){
-
-       appointmentService.save(appointmentDTOSave);
-       return "Appointment saved SUCCESFULLY!";
-
-    }
-
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/delete/{date}")
     public ResponseEntity<Appointment> delete(@PathVariable Long id){
         ResponseEntity<Appointment> response;
         if(appointmentService.search(id)==null){

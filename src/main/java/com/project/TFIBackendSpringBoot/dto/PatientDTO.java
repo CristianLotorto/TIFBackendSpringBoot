@@ -6,18 +6,17 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.sql.Date;
-import java.util.Set;
 
 @NoArgsConstructor
 @Getter
 @Setter
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class PatientDTO{
+    private Long id;
     private String name;
     private String lastName;
     private String DNI;
     private String address;
-    private Set<AppointmentDTO> appointments;
     private Date dischargedDate;
 
 }

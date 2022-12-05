@@ -1,8 +1,7 @@
 package com.project.TFIBackendSpringBoot.service;
 
 import com.project.TFIBackendSpringBoot.dto.PatientDTO;
-import com.project.TFIBackendSpringBoot.model.Appointment;
-import com.project.TFIBackendSpringBoot.model.Patient;
+import com.project.TFIBackendSpringBoot.dto.PatientDTOSave;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -11,7 +10,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.sql.Date;
-import java.util.HashSet;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -31,19 +29,17 @@ class PatientServiceImplTest {
     @Order(1)
     void save() {
 
-        Patient patient=new Patient();
-        Set<Appointment> appointments=new HashSet<>();
-        patient.setName("Charles");
-        patient.setLastName("Bronson");
-        patient.setDNI("41235664");
-        patient.setAddress("FifaStreet 1613");
-        patient.setAppointments(appointments);
-        patient.setDischargedDate(new Date(2022,9,7));
-        patient.setRole("user");
+        PatientDTOSave patientDTOSave=new PatientDTOSave();
+        patientDTOSave.setName("Charles");
+        patientDTOSave.setLastName("Bronson");
+        patientDTOSave.setDNI("41235664");
+        patientDTOSave.setAddress("FifaStreet 1613");
+        patientDTOSave.setDischargedDate(new Date(2022,9,7));
+        patientDTOSave.setRole("user");
 
-        patientService.save(patient);
+        patientService.save(patientDTOSave);
 
-        PatientDTO patientCharles=patientService.search(1L);
+        PatientDTO patientCharles=patientService.search("41235664");
 
         assertNotNull(patientCharles);
 
@@ -52,38 +48,34 @@ class PatientServiceImplTest {
     @Test
     @Order(2)
     void search() {
-        Patient patient=new Patient();
-        Set<Appointment> appointments=new HashSet<>();
-        patient.setName("Charles");
-        patient.setLastName("Bronson");
-        patient.setDNI("41235664");
-        patient.setAddress("FifaStreet 1613");
-        patient.setAppointments(appointments);
-        patient.setDischargedDate(new Date(2022,9,7));
-        patient.setRole("user");
+        PatientDTOSave patientDTOSave=new PatientDTOSave();
+        patientDTOSave.setName("Charles");
+        patientDTOSave.setLastName("Bronson");
+        patientDTOSave.setDNI("41235514");
+        patientDTOSave.setAddress("FifaStreet 1613");
+        patientDTOSave.setDischargedDate(new Date(2022,9,7));
+        patientDTOSave.setRole("user");
 
-        patientService.save(patient);
+        patientService.save(patientDTOSave);
 
-        Long id=1L;
-        PatientDTO patientCharles=patientService.search(1L);
+        String patientName="Charles";
+        PatientDTO patientCharles=patientService.search("41235514");
 
-         assertEquals(patientCharles.getId(),id);
+         assertEquals(patientCharles.getName(),patientName);
     }
 
     @Test
     @Order(3)
     void searchAll() {
-        Patient patient=new Patient();
-        Set<Appointment> appointments=new HashSet<>();
-        patient.setName("Charles");
-        patient.setLastName("Bronson");
-        patient.setDNI("41235664");
-        patient.setAddress("FifaStreet 1613");
-        patient.setAppointments(appointments);
-        patient.setDischargedDate(new Date(2022,9,7));
-        patient.setRole("user");
+        PatientDTOSave patientDTOSave=new PatientDTOSave();
+        patientDTOSave.setName("Charles");
+        patientDTOSave.setLastName("Bronson");
+        patientDTOSave.setDNI("41698664");
+        patientDTOSave.setAddress("FifaStreet 1613");
+        patientDTOSave.setDischargedDate(new Date(2022,9,7));
+        patientDTOSave.setRole("user");
 
-        patientService.save(patient);
+        patientService.save(patientDTOSave);
 
         Set<PatientDTO> allPatients=patientService.searchAll();
 
@@ -94,64 +86,57 @@ class PatientServiceImplTest {
     @Test
     @Order(4)
     void modify() {
-        Patient patient=new Patient();
-        Set<Appointment> appointments=new HashSet<>();
-        patient.setName("Charles");
-        patient.setLastName("Bronson");
-        patient.setDNI("41235664");
-        patient.setAddress("FifaStreet 1613");
-        patient.setAppointments(appointments);
-        patient.setDischargedDate(new Date(2022,9,7));
-        patient.setRole("user");
+        PatientDTOSave patientDTOSave=new PatientDTOSave();
+        patientDTOSave.setName("Charles");
+        patientDTOSave.setLastName("Bronson");
+        patientDTOSave.setDNI("32655148");
+        patientDTOSave.setAddress("FifaStreet 1613");
+        patientDTOSave.setDischargedDate(new Date(2022,9,7));
+        patientDTOSave.setRole("user");
 
-        patientService.save(patient);
+        patientService.save(patientDTOSave);
 
-        PatientDTO notModifiedPatient=patientService.search(1L);
+        PatientDTO notModifiedPatient=patientService.search("32655148");
 
         String name="Simon";
-        Long id=1L;
-        Patient patient2=new Patient();
-        patient2.setName(name);
-        patient2.setLastName("Bronson");
-        patient2.setDNI("41235664");
-        patient2.setAddress("FifaStreet 1613");
-        patient2.setAppointments(appointments);
-        patient2.setDischargedDate(new Date(2022,9,7));
-        patient2.setRole("user");
-        patient2.setId(1L);
+        PatientDTOSave patientDTOSave2=new PatientDTOSave();
+        patientDTOSave2.setName(name);
+        patientDTOSave2.setLastName("Bronson");
+        patientDTOSave2.setDNI("32655148");
+        patientDTOSave2.setAddress("FifaStreet 1613");
+        patientDTOSave2.setDischargedDate(new Date(2022,9,7));
+        patientDTOSave2.setRole("user");
+        patientDTOSave2.setId(notModifiedPatient.getId());
 
 
-        patientService.modify(patient2);
+        patientService.modify(patientDTOSave2);
 
-        PatientDTO modifiedPatient= patientService.search(1L);
+        PatientDTO modifiedPatient= patientService.search("32655148");
 
         assertNotEquals(modifiedPatient.getName(),notModifiedPatient.getName());
         assertEquals(modifiedPatient.getAddress(),notModifiedPatient.getAddress());
-        assertEquals(modifiedPatient.getId(),id);
+        assertEquals(modifiedPatient.getName(),name);
     }
 
     @Test
     @Order(5)
     void remove() {
-        Patient patient=new Patient();
-        Set<Appointment> appointments=new HashSet<>();
-        patient.setName("Charles");
-        patient.setLastName("Bronson");
-        patient.setDNI("41235664");
-        patient.setAddress("FifaStreet 1613");
-        patient.setAppointments(appointments);
-        patient.setDischargedDate(new Date(2022,9,7));
-        patient.setRole("user");
+        PatientDTOSave patientDTOSave=new PatientDTOSave();
+        patientDTOSave.setName("Charles");
+        patientDTOSave.setLastName("Bronson");
+        patientDTOSave.setDNI("46235664");
+        patientDTOSave.setAddress("FifaStreet 1613");
+        patientDTOSave.setDischargedDate(new Date(2022,9,7));
+        patientDTOSave.setRole("user");
 
-        patientService.save(patient);
+        patientService.save(patientDTOSave);
 
-        Long id=1L;
 
-        PatientDTO searchPatient=patientService.search(id);
+        PatientDTO searchPatient=patientService.search("46235664");
 
-            patientService.remove(id);
+            patientService.remove(searchPatient.getId());
             assertNotNull(searchPatient);
-            assertNull(patientService.search(id));
+            assertNull(patientService.search("46235664"));
 
     }
 }

@@ -2,6 +2,7 @@ package com.project.TFIBackendSpringBoot.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
+import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -22,7 +23,7 @@ public class Dentist {
     @Column(name="last_name")
     private String lastName;
     private String license;
-    @OneToMany(mappedBy="dentist", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy="dentist")
     @JsonIgnore
     private Set<Appointment> appointments= new HashSet<>();
     private String role;

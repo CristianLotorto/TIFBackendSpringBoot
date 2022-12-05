@@ -5,15 +5,16 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import java.util.Set;
+
 
 @NoArgsConstructor
 @Getter
 @Setter
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class DentistDTO {
+    private Long id;
     private String name;
     private String lastName;
-    private Set<AppointmentDTO> appointments;
+    private String license;
 
 }
