@@ -23,10 +23,7 @@ class DentistServiceImplTest {
         this.dentistService=dentistService;
     }
 
-    @Test
-    @Order(1)
-    void save() {
-
+    public void instanceEntity(){
         DentistDTOSave dentistDTOSave=new DentistDTOSave();
         dentistDTOSave.setName("Bob");
         dentistDTOSave.setLastName("Tomasson");
@@ -34,6 +31,15 @@ class DentistServiceImplTest {
         dentistDTOSave.setRole("user");
 
         dentistService.save(dentistDTOSave);
+    }
+
+    @Test
+    @Order(1)
+    void save() {
+
+        if(dentistService.searchAll().isEmpty()){
+            instanceEntity();
+        }
 
         DentistDTO dentistBob=dentistService.search("4-12356-6434");
 
@@ -44,16 +50,12 @@ class DentistServiceImplTest {
     @Test
     @Order(2)
     void search() {
-        DentistDTOSave dentistDTOSave=new DentistDTOSave();
-        dentistDTOSave.setName("Bob");
-        dentistDTOSave.setLastName("Tomasson");
-        dentistDTOSave.setLicense("4-12365-6434");
-        dentistDTOSave.setRole("user");
-
-        dentistService.save(dentistDTOSave);
+        if(dentistService.searchAll().isEmpty()){
+            instanceEntity();
+        }
 
         String dentistName="Bob";
-        DentistDTO dentistBob=dentistService.search("4-12365-6434");
+        DentistDTO dentistBob=dentistService.search("4-12356-6434");
 
         assertEquals(dentistBob.getName(),dentistName);
     }
@@ -61,13 +63,9 @@ class DentistServiceImplTest {
     @Test
     @Order(3)
     void searchAll() {
-        DentistDTOSave dentistDTOSave=new DentistDTOSave();
-        dentistDTOSave.setName("Bob");
-        dentistDTOSave.setLastName("Tomasson");
-        dentistDTOSave.setLicense("4-12356-6434");
-        dentistDTOSave.setRole("user");
-
-        dentistService.save(dentistDTOSave);
+        if(dentistService.searchAll().isEmpty()){
+            instanceEntity();
+        }
 
         Set<DentistDTO> allDentists=dentistService.searchAll();
 
@@ -78,27 +76,23 @@ class DentistServiceImplTest {
     @Test
     @Order(4)
     void modify() {
-        DentistDTOSave dentistDTOSave=new DentistDTOSave();
-        dentistDTOSave.setName("Bob");
-        dentistDTOSave.setLastName("Tomasson");
-        dentistDTOSave.setLicense("4-12356-4643");
-        dentistDTOSave.setRole("user");
+        if(dentistService.searchAll().isEmpty()){
+            instanceEntity();
+        }
 
-        dentistService.save(dentistDTOSave);
-
-        DentistDTO notModifiedDentist=dentistService.search("4-12356-4643");
+        DentistDTO notModifiedDentist=dentistService.search("4-12356-6434");
 
         String name="Timothy";
         DentistDTOSave dentistDTOSave2=new DentistDTOSave();
         dentistDTOSave2.setName(name);
         dentistDTOSave2.setLastName("Tomasson");
-        dentistDTOSave2.setLicense("4-12356-4643");
+        dentistDTOSave2.setLicense("4-12356-6434");
         dentistDTOSave2.setRole("user");
         dentistDTOSave2.setId(notModifiedDentist.getId());
 
         dentistService.modify(dentistDTOSave2);
 
-        DentistDTO modifiedDentist= dentistService.search("4-12356-4643");
+        DentistDTO modifiedDentist= dentistService.search("4-12356-6434");
 
         assertNotEquals(modifiedDentist.getName(),notModifiedDentist.getName());
         assertEquals(modifiedDentist.getLastName(),notModifiedDentist.getLastName());
@@ -108,20 +102,16 @@ class DentistServiceImplTest {
     @Test
     @Order(5)
     void remove() {
-        DentistDTOSave dentistDTOSave=new DentistDTOSave();
-        dentistDTOSave.setName("Bob");
-        dentistDTOSave.setLastName("Tomasson");
-        dentistDTOSave.setLicense("4-12356-3644");
-        dentistDTOSave.setRole("user");
-
-        dentistService.save(dentistDTOSave);
+        if(dentistService.searchAll().isEmpty()){
+            instanceEntity();
+        }
 
 
-        DentistDTO searchDentist=dentistService.search("4-12356-3644");
+        DentistDTO searchDentist=dentistService.search("4-12356-6434");
 
         dentistService.remove(searchDentist.getId());
         assertNotNull(searchDentist);
-        assertNull(dentistService.search("4-12356-3644"));
+        assertNull(dentistService.search("4-12356-6434"));
 
     }
 }

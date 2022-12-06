@@ -33,20 +33,15 @@ class AppointmentServiceImplTest {
         this.dentistService=dentistService;
         this.patientService=patientService;
     }
-
-
-    @Test
-    @Order(1)
-    void save() {
-        DentistDTOSave dentistDTOSave=new DentistDTOSave();
+    public void instanceEntity(){
+    DentistDTOSave dentistDTOSave=new DentistDTOSave();
         dentistDTOSave.setName("Bob");
         dentistDTOSave.setLastName("Tomasson");
         dentistDTOSave.setLicense("4-12356-6434");
         dentistDTOSave.setRole("user");
 
         dentistService.save(dentistDTOSave);
-
-        PatientDTOSave patientDTOSave=new PatientDTOSave();
+    PatientDTOSave patientDTOSave=new PatientDTOSave();
         patientDTOSave.setName("Charles");
         patientDTOSave.setLastName("Bronson");
         patientDTOSave.setDNI("41235664");
@@ -55,6 +50,15 @@ class AppointmentServiceImplTest {
         patientDTOSave.setRole("user");
 
         patientService.save(patientDTOSave);
+    }
+
+    @Test
+    @Order(1)
+    void save() {
+        if(patientService.searchAll().isEmpty()||patientService.searchAll().isEmpty()) {
+            instanceEntity();
+        }
+
         ObjectMapper mapper=new ObjectMapper();
 
         Dentist dentistEntity=mapper.convertValue(dentistService.search("4-12356-6434"),Dentist.class);
@@ -77,23 +81,10 @@ class AppointmentServiceImplTest {
     @Test
     @Order(2)
     void search() {
-        DentistDTOSave dentistDTOSave=new DentistDTOSave();
-        dentistDTOSave.setName("Bob");
-        dentistDTOSave.setLastName("Tomasson");
-        dentistDTOSave.setLicense("4-12356-6434");
-        dentistDTOSave.setRole("user");
+        if(patientService.searchAll().isEmpty()||patientService.searchAll().isEmpty()) {
+            instanceEntity();
+        }
 
-        dentistService.save(dentistDTOSave);
-
-        PatientDTOSave patientDTOSave=new PatientDTOSave();
-        patientDTOSave.setName("Charles");
-        patientDTOSave.setLastName("Bronson");
-        patientDTOSave.setDNI("41235664");
-        patientDTOSave.setAddress("FifaStreet 1613");
-        patientDTOSave.setDischargedDate(new Date(2022,9,7));
-        patientDTOSave.setRole("user");
-
-        patientService.save(patientDTOSave);
         ObjectMapper mapper=new ObjectMapper();
 
         Dentist dentistEntity=mapper.convertValue(dentistService.search("4-12356-6434"),Dentist.class);
@@ -116,23 +107,9 @@ class AppointmentServiceImplTest {
     @Test
     @Order(3)
     void searchAll() {
-        DentistDTOSave dentistDTOSave=new DentistDTOSave();
-        dentistDTOSave.setName("Bob");
-        dentistDTOSave.setLastName("Tomasson");
-        dentistDTOSave.setLicense("4-12356-6434");
-        dentistDTOSave.setRole("user");
-
-        dentistService.save(dentistDTOSave);
-
-        PatientDTOSave patientDTOSave=new PatientDTOSave();
-        patientDTOSave.setName("Charles");
-        patientDTOSave.setLastName("Bronson");
-        patientDTOSave.setDNI("41235664");
-        patientDTOSave.setAddress("FifaStreet 1613");
-        patientDTOSave.setDischargedDate(new Date(2022,9,7));
-        patientDTOSave.setRole("user");
-
-        patientService.save(patientDTOSave);
+        if(patientService.searchAll().isEmpty()||patientService.searchAll().isEmpty()) {
+            instanceEntity();
+        }
         ObjectMapper mapper=new ObjectMapper();
 
         Dentist dentistEntity=mapper.convertValue(dentistService.search("4-12356-6434"),Dentist.class);
@@ -155,23 +132,9 @@ class AppointmentServiceImplTest {
     @Test
     @Order(4)
     void modify() {
-        DentistDTOSave dentistDTOSave=new DentistDTOSave();
-        dentistDTOSave.setName("Bob");
-        dentistDTOSave.setLastName("Tomasson");
-        dentistDTOSave.setLicense("4-12356-6434");
-        dentistDTOSave.setRole("user");
-
-        dentistService.save(dentistDTOSave);
-
-        PatientDTOSave patientDTOSave=new PatientDTOSave();
-        patientDTOSave.setName("Charles");
-        patientDTOSave.setLastName("Bronson");
-        patientDTOSave.setDNI("41235664");
-        patientDTOSave.setAddress("FifaStreet 1613");
-        patientDTOSave.setDischargedDate(new Date(2022,9,7));
-        patientDTOSave.setRole("user");
-
-        patientService.save(patientDTOSave);
+        if(patientService.searchAll().isEmpty()||patientService.searchAll().isEmpty()) {
+            instanceEntity();
+        }
         ObjectMapper mapper=new ObjectMapper();
 
         Dentist dentistEntity=mapper.convertValue(dentistService.search("4-12356-6434"),Dentist.class);
@@ -209,23 +172,9 @@ class AppointmentServiceImplTest {
     @Test
     @Order(5)
     void remove() {
-        DentistDTOSave dentistDTOSave=new DentistDTOSave();
-        dentistDTOSave.setName("Bob");
-        dentistDTOSave.setLastName("Tomasson");
-        dentistDTOSave.setLicense("4-12356-6434");
-        dentistDTOSave.setRole("user");
-
-        dentistService.save(dentistDTOSave);
-
-        PatientDTOSave patientDTOSave=new PatientDTOSave();
-        patientDTOSave.setName("Charles");
-        patientDTOSave.setLastName("Bronson");
-        patientDTOSave.setDNI("41235664");
-        patientDTOSave.setAddress("FifaStreet 1613");
-        patientDTOSave.setDischargedDate(new Date(2022,9,7));
-        patientDTOSave.setRole("user");
-
-        patientService.save(patientDTOSave);
+        if(patientService.searchAll().isEmpty()||patientService.searchAll().isEmpty()) {
+            instanceEntity();
+        }
         ObjectMapper mapper=new ObjectMapper();
 
         Dentist dentistEntity=mapper.convertValue(dentistService.search("4-12356-6434"),Dentist.class);

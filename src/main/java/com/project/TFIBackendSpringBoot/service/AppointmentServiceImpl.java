@@ -62,7 +62,7 @@ public class AppointmentServiceImpl implements IAppointmentService<AppointmentDT
             appointmentDTO.setDentistDTO(dentistService.search(appointment.getDentist().getLicense()));
             appointmentDTO.setPatientDTO(patientService.search(appointment.getPatient().getDNI()));
         }catch (RuntimeException e){
-            System.out.println("Error re zarpado");
+            System.out.println("Error REEE zarpado");
             System.out.println(e);
         }
 

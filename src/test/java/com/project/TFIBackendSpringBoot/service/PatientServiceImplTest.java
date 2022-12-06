@@ -25,9 +25,7 @@ class PatientServiceImplTest {
         this.patientService=patientService;
     }
 
-    @Test
-    @Order(1)
-    void save() {
+    public void instanceEntity(){
 
         PatientDTOSave patientDTOSave=new PatientDTOSave();
         patientDTOSave.setName("Charles");
@@ -39,6 +37,16 @@ class PatientServiceImplTest {
 
         patientService.save(patientDTOSave);
 
+    }
+
+    @Test
+    @Order(1)
+    void save() {
+
+        if(patientService.searchAll().isEmpty()){
+            instanceEntity();
+        }
+
         PatientDTO patientCharles=patientService.search("41235664");
 
         assertNotNull(patientCharles);
@@ -48,18 +56,12 @@ class PatientServiceImplTest {
     @Test
     @Order(2)
     void search() {
-        PatientDTOSave patientDTOSave=new PatientDTOSave();
-        patientDTOSave.setName("Charles");
-        patientDTOSave.setLastName("Bronson");
-        patientDTOSave.setDNI("41235514");
-        patientDTOSave.setAddress("FifaStreet 1613");
-        patientDTOSave.setDischargedDate(new Date(2022,9,7));
-        patientDTOSave.setRole("user");
-
-        patientService.save(patientDTOSave);
+        if(patientService.searchAll().isEmpty()){
+            instanceEntity();
+        }
 
         String patientName="Charles";
-        PatientDTO patientCharles=patientService.search("41235514");
+        PatientDTO patientCharles=patientService.search("41235664");
 
          assertEquals(patientCharles.getName(),patientName);
     }
@@ -67,15 +69,9 @@ class PatientServiceImplTest {
     @Test
     @Order(3)
     void searchAll() {
-        PatientDTOSave patientDTOSave=new PatientDTOSave();
-        patientDTOSave.setName("Charles");
-        patientDTOSave.setLastName("Bronson");
-        patientDTOSave.setDNI("41698664");
-        patientDTOSave.setAddress("FifaStreet 1613");
-        patientDTOSave.setDischargedDate(new Date(2022,9,7));
-        patientDTOSave.setRole("user");
-
-        patientService.save(patientDTOSave);
+        if(patientService.searchAll().isEmpty()){
+            instanceEntity();
+        }
 
         Set<PatientDTO> allPatients=patientService.searchAll();
 
@@ -86,23 +82,17 @@ class PatientServiceImplTest {
     @Test
     @Order(4)
     void modify() {
-        PatientDTOSave patientDTOSave=new PatientDTOSave();
-        patientDTOSave.setName("Charles");
-        patientDTOSave.setLastName("Bronson");
-        patientDTOSave.setDNI("32655148");
-        patientDTOSave.setAddress("FifaStreet 1613");
-        patientDTOSave.setDischargedDate(new Date(2022,9,7));
-        patientDTOSave.setRole("user");
+        if(patientService.searchAll().isEmpty()){
+            instanceEntity();
+        }
 
-        patientService.save(patientDTOSave);
-
-        PatientDTO notModifiedPatient=patientService.search("32655148");
+        PatientDTO notModifiedPatient=patientService.search("41235664");
 
         String name="Simon";
         PatientDTOSave patientDTOSave2=new PatientDTOSave();
         patientDTOSave2.setName(name);
         patientDTOSave2.setLastName("Bronson");
-        patientDTOSave2.setDNI("32655148");
+        patientDTOSave2.setDNI("41235664");
         patientDTOSave2.setAddress("FifaStreet 1613");
         patientDTOSave2.setDischargedDate(new Date(2022,9,7));
         patientDTOSave2.setRole("user");
@@ -111,7 +101,7 @@ class PatientServiceImplTest {
 
         patientService.modify(patientDTOSave2);
 
-        PatientDTO modifiedPatient= patientService.search("32655148");
+        PatientDTO modifiedPatient= patientService.search("41235664");
 
         assertNotEquals(modifiedPatient.getName(),notModifiedPatient.getName());
         assertEquals(modifiedPatient.getAddress(),notModifiedPatient.getAddress());
@@ -121,22 +111,16 @@ class PatientServiceImplTest {
     @Test
     @Order(5)
     void remove() {
-        PatientDTOSave patientDTOSave=new PatientDTOSave();
-        patientDTOSave.setName("Charles");
-        patientDTOSave.setLastName("Bronson");
-        patientDTOSave.setDNI("46235664");
-        patientDTOSave.setAddress("FifaStreet 1613");
-        patientDTOSave.setDischargedDate(new Date(2022,9,7));
-        patientDTOSave.setRole("user");
-
-        patientService.save(patientDTOSave);
+        if(patientService.searchAll().isEmpty()){
+            instanceEntity();
+        }
 
 
-        PatientDTO searchPatient=patientService.search("46235664");
+        PatientDTO searchPatient=patientService.search("41235664");
 
             patientService.remove(searchPatient.getId());
             assertNotNull(searchPatient);
-            assertNull(patientService.search("46235664"));
+            assertNull(patientService.search("41235664"));
 
     }
 }
