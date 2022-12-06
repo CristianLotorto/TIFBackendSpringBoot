@@ -39,10 +39,11 @@ public class PatientServiceImpl implements IPatientService<PatientDTO, PatientDT
     }
 
     @Override
-    public void remove(Long id) {
+    public void remove(String dni) {
         try{
 
-        patientRepository.deleteById(id);
+            Patient patient=patientRepository.findByDNI(dni);
+            patientRepository.deleteById(patient.getId());
 
         }catch (RuntimeException e){
             System.out.println("Errorico");

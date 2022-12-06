@@ -38,9 +38,10 @@ public class DentistServiceImpl implements IDentistService<DentistDTO, DentistDT
        }
 
        @Override
-       public void remove(Long id){
+       public void remove(String license){
               try{
-                     dentistRepository.deleteById(id);
+                     Dentist dentist=dentistRepository.findByLicense(license);
+                     dentistRepository.deleteById(dentist.getId());
 
               }catch (RuntimeException e){
               System.out.println("Se re picó");

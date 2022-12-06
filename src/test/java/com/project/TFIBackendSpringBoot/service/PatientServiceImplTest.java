@@ -118,7 +118,7 @@ class PatientServiceImplTest {
 
         PatientDTO searchPatient=patientService.search("41235664");
 
-            patientService.remove(searchPatient.getId());
+            patientService.remove("41235664");
             assertNotNull(searchPatient);
             assertNull(patientService.search("41235664"));
 

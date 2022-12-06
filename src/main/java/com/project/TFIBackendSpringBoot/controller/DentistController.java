@@ -59,13 +59,13 @@ public class DentistController {
 
     }
 
-    @DeleteMapping("/delete")
-    public ResponseEntity<Dentist> delete(@RequestParam Long id, @RequestParam String license){
+    @DeleteMapping("/delete/{license}")
+    public ResponseEntity<Dentist> delete(@PathVariable String license){
         ResponseEntity<Dentist> response;
         if(dentistService.search(license)==null){
             response= new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }else{
-            dentistService.remove(id);
+            dentistService.remove(license);
             response= new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
         return response;

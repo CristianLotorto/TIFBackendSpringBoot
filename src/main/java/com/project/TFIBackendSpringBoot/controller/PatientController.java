@@ -61,13 +61,13 @@ public class PatientController {
 
     }
 
-    @DeleteMapping("/delete")
-    public ResponseEntity<Patient> delete(@RequestParam Long id, @RequestParam String dni){
+    @DeleteMapping("/delete/{dni}")
+    public ResponseEntity<Patient> delete(@PathVariable String dni){
         ResponseEntity<Patient> response;
         if(patientService.search(dni)==null){
             response= new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }else{
-            patientService.remove(id);
+            patientService.remove(dni);
             response= new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
         return response;

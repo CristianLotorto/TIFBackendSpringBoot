@@ -109,7 +109,7 @@ class DentistServiceImplTest {
 
         DentistDTO searchDentist=dentistService.search("4-12356-6434");
 
-        dentistService.remove(searchDentist.getId());
+        dentistService.remove("4-12356-6434");
         assertNotNull(searchDentist);
         assertNull(dentistService.search("4-12356-6434"));
 
