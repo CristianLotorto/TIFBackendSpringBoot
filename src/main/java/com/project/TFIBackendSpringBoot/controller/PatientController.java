@@ -26,6 +26,20 @@ public class PatientController {
         return "Hello Everyone!";
     }
 
+    @PostMapping("/save")
+    public String save(@RequestBody PatientDTOSave patientDTOSave){
+
+        String response;
+        if (patientService.search(patientDTOSave.getDNI())==null) {
+            patientService.save(patientDTOSave);
+            response="Patient saved SUCCESFULLY!";
+        }else{
+            response="Patient allready LOADED in database.";
+        }
+        return response;
+
+    }
+
     @GetMapping("/search/{dni}")
     public ResponseEntity<PatientDTO> search(@PathVariable String dni){
         PatientDTO patientDTO= patientService.search(dni);
@@ -53,13 +67,6 @@ public class PatientController {
         return response;
     }
 
-    @PostMapping("/save")
-    public String save(@RequestBody PatientDTOSave patientDTOSave){
-
-        patientService.save(patientDTOSave);
-        return "Patient saved SUCCESFULLY!";
-
-    }
 
     @DeleteMapping("/delete/{dni}")
     public ResponseEntity<Patient> delete(@PathVariable String dni){

@@ -53,9 +53,14 @@ public class DentistController {
 
     @PostMapping("/save")
     public String save(@RequestBody DentistDTOSave dentistDTOSave){
-
-        dentistService.save(dentistDTOSave);
-        return "Dentist saved SUCCESFULLY!";
+        String response;
+        if (dentistService.search(dentistDTOSave.getLicense())==null) {
+            dentistService.save(dentistDTOSave);
+            response="Dentist saved SUCCESFULLY!";
+        }else{
+            response="Dentist allready LOADED in database.";
+        }
+        return response;
 
     }
 

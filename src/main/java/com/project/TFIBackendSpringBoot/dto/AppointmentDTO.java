@@ -13,6 +13,7 @@ import java.sql.Time;
 @Setter
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class AppointmentDTO {
+    private Long id;
     private DentistDTO dentistDTO;
     private PatientDTO patientDTO;
     private Date appointmentDate;

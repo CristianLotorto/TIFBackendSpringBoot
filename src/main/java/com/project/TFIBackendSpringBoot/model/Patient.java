@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
 import java.sql.Date;
@@ -21,7 +20,8 @@ import java.util.Set;
 public class Patient{
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @SequenceGenerator(name= "patient_sequence", sequenceName="PATIENT_SEQ")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator ="patient_sequence")
     private Long id;
     private String name;
     @Column(name="last_name")

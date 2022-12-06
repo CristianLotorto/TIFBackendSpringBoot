@@ -17,7 +17,8 @@ import java.sql.Time;
 public class Appointment {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @SequenceGenerator(name= "appointment_sequence", sequenceName="APPOINTMENT_SEQ")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator ="appointment_sequence")
     private Long id;
     @ManyToOne
     @JoinColumn(name = "dentist_id", nullable = false)

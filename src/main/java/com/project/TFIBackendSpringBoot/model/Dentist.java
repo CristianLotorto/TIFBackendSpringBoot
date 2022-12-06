@@ -2,7 +2,6 @@ package com.project.TFIBackendSpringBoot.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.*;
-import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
 import java.util.HashSet;
@@ -17,7 +16,8 @@ import java.util.Set;
 public class Dentist {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @SequenceGenerator(name= "dentist_sequence", sequenceName="DENTIST_SEQ")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator ="dentist_sequence")
     private Long id;
     private String name;
     @Column(name="last_name")
