@@ -5,6 +5,7 @@ package com.project.TFIBackendSpringBoot.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.TFIBackendSpringBoot.dto.AppointmentDTO;
 import com.project.TFIBackendSpringBoot.dto.AppointmentDTOSave;
+import com.project.TFIBackendSpringBoot.exceptions.ResourseNotFoundException;
 import com.project.TFIBackendSpringBoot.model.Appointment;
 import com.project.TFIBackendSpringBoot.repository.IAppointmentRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -61,7 +62,7 @@ public class AppointmentServiceImpl implements IAppointmentService<AppointmentDT
         try {
             appointmentDTO.setDentistDTO(dentistService.search(appointment.getDentist().getLicense()));
             appointmentDTO.setPatientDTO(patientService.search(appointment.getPatient().getDNI()));
-        }catch (RuntimeException e){
+        }catch (RuntimeException | ResourseNotFoundException e){
             System.out.println("Error REEE zarpado");
             System.out.println(e);
         }
@@ -70,7 +71,7 @@ public class AppointmentServiceImpl implements IAppointmentService<AppointmentDT
     }
 
     @Override
-    public Set<AppointmentDTO> searchAll() {
+    public Set<AppointmentDTO> searchAll() throws ResourseNotFoundException {
         List<Appointment> appointments= appointmentRepository.findAll();
         Set<AppointmentDTO> appointmentsDTO=new HashSet<>();
 

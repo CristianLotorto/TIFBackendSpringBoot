@@ -2,6 +2,8 @@ package com.project.TFIBackendSpringBoot.service;
 
 import com.project.TFIBackendSpringBoot.dto.DentistDTO;
 import com.project.TFIBackendSpringBoot.dto.DentistDTOSave;
+import com.project.TFIBackendSpringBoot.exceptions.ResourseAlreadyExistsExeption;
+import com.project.TFIBackendSpringBoot.exceptions.ResourseNotFoundException;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -23,7 +25,7 @@ class DentistServiceImplTest {
         this.dentistService=dentistService;
     }
 
-    public void instanceEntity(){
+    public void instanceEntity() throws ResourseAlreadyExistsExeption {
         DentistDTOSave dentistDTOSave=new DentistDTOSave();
         dentistDTOSave.setName("Bob");
         dentistDTOSave.setLastName("Tomasson");
@@ -35,7 +37,7 @@ class DentistServiceImplTest {
 
     @Test
     @Order(1)
-    void save() {
+    void save() throws ResourseNotFoundException, ResourseAlreadyExistsExeption {
 
         if(dentistService.searchAll().isEmpty()){
             instanceEntity();
@@ -49,7 +51,7 @@ class DentistServiceImplTest {
 
     @Test
     @Order(2)
-    void search() {
+    void search() throws ResourseNotFoundException, ResourseAlreadyExistsExeption {
         if(dentistService.searchAll().isEmpty()){
             instanceEntity();
         }
@@ -62,7 +64,7 @@ class DentistServiceImplTest {
 
     @Test
     @Order(3)
-    void searchAll() {
+    void searchAll() throws ResourseNotFoundException, ResourseAlreadyExistsExeption {
         if(dentistService.searchAll().isEmpty()){
             instanceEntity();
         }
@@ -75,7 +77,7 @@ class DentistServiceImplTest {
 
     @Test
     @Order(4)
-    void modify() {
+    void modify() throws ResourseNotFoundException, ResourseAlreadyExistsExeption {
         if(dentistService.searchAll().isEmpty()){
             instanceEntity();
         }
@@ -101,7 +103,7 @@ class DentistServiceImplTest {
 
     @Test
     @Order(5)
-    void remove() {
+    void remove() throws ResourseNotFoundException, ResourseAlreadyExistsExeption {
         if(dentistService.searchAll().isEmpty()){
             instanceEntity();
         }

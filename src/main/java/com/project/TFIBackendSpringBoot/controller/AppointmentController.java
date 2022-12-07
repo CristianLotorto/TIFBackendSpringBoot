@@ -3,6 +3,7 @@ package com.project.TFIBackendSpringBoot.controller;
 
 import com.project.TFIBackendSpringBoot.dto.AppointmentDTO;
 import com.project.TFIBackendSpringBoot.dto.AppointmentDTOSave;
+import com.project.TFIBackendSpringBoot.exceptions.ResourseNotFoundException;
 import com.project.TFIBackendSpringBoot.model.Appointment;
 import com.project.TFIBackendSpringBoot.service.AppointmentServiceImpl;
 import lombok.AllArgsConstructor;
@@ -10,7 +11,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.Date;
+
 import java.util.Set;
 
 @AllArgsConstructor
@@ -49,7 +50,7 @@ public class AppointmentController {
     }
 
     @GetMapping("/search/all")
-    public ResponseEntity<Set<AppointmentDTO>> searchAll(){
+    public ResponseEntity<Set<AppointmentDTO>> searchAll() throws ResourseNotFoundException {
         ResponseEntity<Set<AppointmentDTO>> response;
         Set<AppointmentDTO> appointmentsDTO=appointmentService.searchAll();
 

@@ -3,6 +3,8 @@ package com.project.TFIBackendSpringBoot.service;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project.TFIBackendSpringBoot.dto.DentistDTO;
 import com.project.TFIBackendSpringBoot.dto.DentistDTOSave;
+import com.project.TFIBackendSpringBoot.exceptions.ResourseAlreadyExistsExeption;
+import com.project.TFIBackendSpringBoot.exceptions.ResourseNotFoundException;
 import com.project.TFIBackendSpringBoot.model.Dentist;
 import com.project.TFIBackendSpringBoot.repository.IDentistRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,49 +35,74 @@ public class DentistServiceImpl implements IDentistService<DentistDTO, DentistDT
        }
 
        @Override
-       public void save(DentistDTOSave dentistDTOSave) {
-              saveDentist(dentistDTOSave);
+       public void save(DentistDTOSave dentistDTOSave)throws ResourseAlreadyExistsExeption {
+
+              Dentist dentist= dentistRepository.findByLicense(dentistDTOSave.getLicense());
+
+              if (dentist==null){
+
+                     saveDentist(dentistDTOSave);
+
+              }else{
+                     throw new ResourseAlreadyExistsExeption("Dentist with license: " + dentistDTOSave.getLicense() + " is already loaded in database");
+              }
        }
 
        @Override
-       public void remove(String license){
-              try{
+       public void remove(String license)throws ResourseNotFoundException {
+              if(dentistRepository.findByLicense(license)==null) {
+                     throw new ResourseNotFoundException("Dentist with license: " + license + " doesn't exist in database");
+              }else{
+
                      Dentist dentist=dentistRepository.findByLicense(license);
-                     dentistRepository.deleteById(dentist.getId());
 
-              }catch (RuntimeException e){
-              System.out.println("Se re picó");
-              System.out.println(e);
-       }
+                     dentistRepository.deleteById(dentist.getId());
+              }
        }
 
        @Override
-       public DentistDTO search(String license) {
-
+       public DentistDTO search(String license)throws ResourseNotFoundException {
 
               Dentist dentist=dentistRepository.findByLicense(license);
 
-              DentistDTO dentistDTO;
+              if (dentist==null) {
+                     throw new ResourseNotFoundException("Dentist with license: " + license + " doesn't exist in database");
+              }else{
 
-              dentistDTO=mapper.convertValue(dentist, DentistDTO.class);
+                     return mapper.convertValue(dentist, DentistDTO.class);
 
-
-              return dentistDTO;
-       }
-
-       @Override
-       public Set<DentistDTO> searchAll() {
-              List<Dentist> dentists=dentistRepository.findAll();
-              Set<DentistDTO> dentistsDTO=new HashSet<>();
-              for (Dentist dentist:dentists) {
-                     DentistDTO dentistDTO=mapper.convertValue(dentist,DentistDTO.class);
-                     dentistsDTO.add(dentistDTO);
               }
-              return dentistsDTO;
        }
 
        @Override
-       public void modify(DentistDTOSave dentistDTOSave) {
-              saveDentist(dentistDTOSave);
+       public Set<DentistDTO> searchAll()throws ResourseNotFoundException {
+
+              List<Dentist> dentists=dentistRepository.findAll();
+
+              if (dentists.isEmpty()){
+                     throw new ResourseNotFoundException("Dentists list is empty");
+              }else{
+
+                     Set<DentistDTO> dentistsDTO=new HashSet<>();
+                     for (Dentist dentist:dentists) {
+                            DentistDTO dentistDTO=mapper.convertValue(dentist,DentistDTO.class);
+                            dentistsDTO.add(dentistDTO);
+                     }
+                     return dentistsDTO;
+
+              }
+
+       }
+
+       @Override
+       public void modify(DentistDTOSave dentistDTOSave)throws ResourseNotFoundException {
+              Dentist dentist=dentistRepository.findByLicense(dentistDTOSave.getLicense());
+              if(dentist==null){
+                     throw new ResourseNotFoundException("Dentist with license: " + dentistDTOSave.getLicense() + " doesn't exist in database");
+              }else{
+
+                     saveDentist(dentistDTOSave);
+
+              }
        }
 }

@@ -3,6 +3,8 @@ package com.project.TFIBackendSpringBoot.controller;
 
 import com.project.TFIBackendSpringBoot.dto.PatientDTO;
 import com.project.TFIBackendSpringBoot.dto.PatientDTOSave;
+import com.project.TFIBackendSpringBoot.exceptions.ResourseAlreadyExistsExeption;
+import com.project.TFIBackendSpringBoot.exceptions.ResourseNotFoundException;
 import com.project.TFIBackendSpringBoot.model.Patient;
 import com.project.TFIBackendSpringBoot.service.PatientServiceImpl;
 import lombok.AllArgsConstructor;
@@ -27,56 +29,39 @@ public class PatientController {
     }
 
     @PostMapping("/save")
-    public String save(@RequestBody PatientDTOSave patientDTOSave){
+    public ResponseEntity save(@RequestBody PatientDTOSave patientDTOSave)throws ResourseAlreadyExistsExeption {
 
-        String response;
-        if (patientService.search(patientDTOSave.getDNI())==null) {
             patientService.save(patientDTOSave);
-            response="Patient saved SUCCESFULLY!";
-        }else{
-            response="Patient allready LOADED in database.";
-        }
-        return response;
+
+            return ResponseEntity.ok("Patient SAVED successfully!");
 
     }
 
     @GetMapping("/search/{dni}")
-    public ResponseEntity<PatientDTO> search(@PathVariable String dni){
-        PatientDTO patientDTO= patientService.search(dni);
-        ResponseEntity response;
-        if(patientDTO!=null){
-            response=ResponseEntity.ok(patientDTO);
-        }else{
-            response= new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+    public ResponseEntity search(@PathVariable String dni)throws ResourseNotFoundException {
 
-        return response;
+        PatientDTO patientDTO= patientService.search(dni);
+
+        return ResponseEntity.ok("Patient FOUNDED: ");
+
     }
 
     @GetMapping("/search/all")
-    public ResponseEntity<Set<PatientDTO>> searchAll(){
-        ResponseEntity<Set<PatientDTO>> response;
-        Set<PatientDTO> patientsDTOS=patientService.searchAll();
+    public ResponseEntity searchAll()throws ResourseNotFoundException{
 
-        if(patientsDTOS.isEmpty()){
-            response= new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }else{
-            response= ResponseEntity.ok(patientsDTOS);
-        }
+        patientService.searchAll();
 
-        return response;
+        return ResponseEntity.ok("Patients FOUNDED: ");
+
     }
 
 
     @DeleteMapping("/delete/{dni}")
-    public ResponseEntity<Patient> delete(@PathVariable String dni){
-        ResponseEntity<Patient> response;
-        if(patientService.search(dni)==null){
-            response= new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }else{
+    public ResponseEntity delete(@PathVariable String dni)throws ResourseNotFoundException{
+
             patientService.remove(dni);
-            response= new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
-        return response;
+
+            return ResponseEntity.ok("Patient DELETED successfully: ");
+
     }
 }
