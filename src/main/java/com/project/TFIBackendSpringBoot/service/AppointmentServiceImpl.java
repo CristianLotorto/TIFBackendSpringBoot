@@ -48,32 +48,47 @@ public class AppointmentServiceImpl implements IAppointmentService<AppointmentDT
 
 
     @Override
-    public void remove(Long id) {
-        appointmentRepository.deleteById(id);
+    public void remove(Long id)throws ResourseNotFoundException {
+
+        Appointment appointment=appointmentRepository.findById(id).orElse(null);
+
+        if (appointment!=null){
+
+            appointmentRepository.deleteById(id);
+
+        }else{
+            throw new ResourseNotFoundException("Appointment with id: "+id+" doesn't exists in database");
+        }
+
     }
 
     @Override
-    public AppointmentDTO search(Long id) {
+    public AppointmentDTO search(Long id) throws ResourseNotFoundException {
 
-        Appointment appointment =appointmentRepository.findById(id).orElse(null);
+            Appointment appointment =appointmentRepository.findById(id).orElse(null);
 
-        AppointmentDTO appointmentDTO=mapper.convertValue(appointment,AppointmentDTO.class);
 
-        try {
-            appointmentDTO.setDentistDTO(dentistService.search(appointment.getDentist().getLicense()));
-            appointmentDTO.setPatientDTO(patientService.search(appointment.getPatient().getDNI()));
-        }catch (RuntimeException | ResourseNotFoundException e){
-            System.out.println("Error REEE zarpado");
-            System.out.println(e);
-        }
+            if (appointment != null) {
+                AppointmentDTO appointmentDTO=mapper.convertValue(appointment,AppointmentDTO.class);
+                appointmentDTO.setDentistDTO(dentistService.search(appointment.getDentist().getLicense()));
+                appointmentDTO.setPatientDTO(patientService.search(appointment.getPatient().getDNI()));
 
-        return appointmentDTO;
+                return appointmentDTO;
+            }else{
+                throw new ResourseNotFoundException("Appointment with id: "+id+" doesn't exists in database");
+            }
+
     }
 
     @Override
     public Set<AppointmentDTO> searchAll() throws ResourseNotFoundException {
         List<Appointment> appointments= appointmentRepository.findAll();
         Set<AppointmentDTO> appointmentsDTO=new HashSet<>();
+
+        if (appointments.isEmpty()) {
+
+            throw new ResourseNotFoundException("Appointments list is empty");
+        }else{
 
         for (Appointment appointment:appointments) {
 
@@ -87,6 +102,9 @@ public class AppointmentServiceImpl implements IAppointmentService<AppointmentDT
         }
 
         return appointmentsDTO;
+
+        }
+
     }
 
     @Override

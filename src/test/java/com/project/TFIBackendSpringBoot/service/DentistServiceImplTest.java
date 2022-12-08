@@ -4,6 +4,7 @@ import com.project.TFIBackendSpringBoot.dto.DentistDTO;
 import com.project.TFIBackendSpringBoot.dto.DentistDTOSave;
 import com.project.TFIBackendSpringBoot.exceptions.ResourseAlreadyExistsExeption;
 import com.project.TFIBackendSpringBoot.exceptions.ResourseNotFoundException;
+import com.project.TFIBackendSpringBoot.repository.IDentistRepository;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -19,10 +20,12 @@ import static org.junit.jupiter.api.Assertions.*;
 class DentistServiceImplTest {
 
     private DentistServiceImpl dentistService;
+    private IDentistRepository dentistRepository;
 
     @Autowired
-    public DentistServiceImplTest(DentistServiceImpl dentistService){
+    public DentistServiceImplTest(DentistServiceImpl dentistService, IDentistRepository dentistRepository){
         this.dentistService=dentistService;
+        this.dentistRepository=dentistRepository;
     }
 
     public void instanceEntity() throws ResourseAlreadyExistsExeption {
@@ -39,7 +42,7 @@ class DentistServiceImplTest {
     @Order(1)
     void save() throws ResourseNotFoundException, ResourseAlreadyExistsExeption {
 
-        if(dentistService.searchAll().isEmpty()){
+        if(dentistRepository.findAll().isEmpty()){
             instanceEntity();
         }
 
@@ -52,7 +55,7 @@ class DentistServiceImplTest {
     @Test
     @Order(2)
     void search() throws ResourseNotFoundException, ResourseAlreadyExistsExeption {
-        if(dentistService.searchAll().isEmpty()){
+        if(dentistRepository.findAll().isEmpty()){
             instanceEntity();
         }
 
@@ -65,7 +68,7 @@ class DentistServiceImplTest {
     @Test
     @Order(3)
     void searchAll() throws ResourseNotFoundException, ResourseAlreadyExistsExeption {
-        if(dentistService.searchAll().isEmpty()){
+        if(dentistRepository.findAll().isEmpty()){
             instanceEntity();
         }
 
@@ -78,7 +81,7 @@ class DentistServiceImplTest {
     @Test
     @Order(4)
     void modify() throws ResourseNotFoundException, ResourseAlreadyExistsExeption {
-        if(dentistService.searchAll().isEmpty()){
+        if(dentistRepository.findAll().isEmpty()){
             instanceEntity();
         }
 
@@ -104,7 +107,7 @@ class DentistServiceImplTest {
     @Test
     @Order(5)
     void remove() throws ResourseNotFoundException, ResourseAlreadyExistsExeption {
-        if(dentistService.searchAll().isEmpty()){
+        if(dentistRepository.findAll().isEmpty()){
             instanceEntity();
         }
 
@@ -113,7 +116,7 @@ class DentistServiceImplTest {
 
         dentistService.remove("4-12356-6434");
         assertNotNull(searchDentist);
-        assertNull(dentistService.search("4-12356-6434"));
+        assertNull(dentistRepository.findByLicense("4-12356-6434"));
 
     }
 }

@@ -7,8 +7,8 @@ import java.util.Set;
 
 public interface IAppointmentService <T,U> {
     public void save(U u);
-    public void remove(Long id);
-    public T search(Long id);
+    public void remove(Long id) throws ResourseNotFoundException;
+    public T search(Long id) throws ResourseNotFoundException;
     public Set<T> searchAll() throws ResourseNotFoundException;
     public void modify(U u);
 }

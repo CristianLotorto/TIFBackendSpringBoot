@@ -5,8 +5,13 @@ import com.project.TFIBackendSpringBoot.dto.AppointmentDTO;
 import com.project.TFIBackendSpringBoot.dto.AppointmentDTOSave;
 import com.project.TFIBackendSpringBoot.dto.DentistDTOSave;
 import com.project.TFIBackendSpringBoot.dto.PatientDTOSave;
+import com.project.TFIBackendSpringBoot.exceptions.ResourseAlreadyExistsExeption;
+import com.project.TFIBackendSpringBoot.exceptions.ResourseNotFoundException;
 import com.project.TFIBackendSpringBoot.model.Dentist;
 import com.project.TFIBackendSpringBoot.model.Patient;
+import com.project.TFIBackendSpringBoot.repository.IAppointmentRepository;
+import com.project.TFIBackendSpringBoot.repository.IDentistRepository;
+import com.project.TFIBackendSpringBoot.repository.IPatientRepository;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -24,16 +29,23 @@ import static org.junit.jupiter.api.Assertions.*;
 class AppointmentServiceImplTest {
 
     private DentistServiceImpl dentistService;
+    private IDentistRepository dentistRepository;
     private PatientServiceImpl patientService;
+    private IPatientRepository patientRepository;
     private AppointmentServiceImpl appointmentService;
 
+    private IAppointmentRepository appointmentRepository;
+
     @Autowired
-    public AppointmentServiceImplTest(AppointmentServiceImpl appointmentService, DentistServiceImpl dentistService, PatientServiceImpl patientService){
+    public AppointmentServiceImplTest(AppointmentServiceImpl appointmentService, DentistServiceImpl dentistService, PatientServiceImpl patientService, IPatientRepository patientRepository, IDentistRepository dentistRepository, IAppointmentRepository appointmentRepository){
         this.appointmentService=appointmentService;
         this.dentistService=dentistService;
         this.patientService=patientService;
+        this.dentistRepository=dentistRepository;
+        this.patientRepository=patientRepository;
+        this.appointmentRepository=appointmentRepository;
     }
-    public void instanceEntity(){
+    public void instanceEntity() throws ResourseAlreadyExistsExeption {
     DentistDTOSave dentistDTOSave=new DentistDTOSave();
         dentistDTOSave.setName("Bob");
         dentistDTOSave.setLastName("Tomasson");
@@ -54,8 +66,8 @@ class AppointmentServiceImplTest {
 
     @Test
     @Order(1)
-    void save() {
-        if(patientService.searchAll().isEmpty()||patientService.searchAll().isEmpty()) {
+    void save() throws ResourseNotFoundException, ResourseAlreadyExistsExeption {
+        if(dentistRepository.findAll().isEmpty()||patientRepository.findAll().isEmpty()) {
             instanceEntity();
         }
 
@@ -72,7 +84,7 @@ class AppointmentServiceImplTest {
 
         appointmentService.save(appointmentDTOSave);
 
-        AppointmentDTO appointmentSearch=appointmentService.search(3L);
+        AppointmentDTO appointmentSearch=appointmentService.search(1L);
 
         assertNotNull(appointmentSearch);
 
@@ -80,8 +92,8 @@ class AppointmentServiceImplTest {
 
     @Test
     @Order(2)
-    void search() {
-        if(patientService.searchAll().isEmpty()||patientService.searchAll().isEmpty()) {
+    void search() throws ResourseNotFoundException, ResourseAlreadyExistsExeption {
+        if(dentistRepository.findAll().isEmpty()||patientRepository.findAll().isEmpty()) {
             instanceEntity();
         }
 
@@ -99,15 +111,15 @@ class AppointmentServiceImplTest {
         appointmentService.save(appointmentDTOSave);
 
         String patientName="Charles";
-        AppointmentDTO appointmentSearch=appointmentService.search(3L);
+        AppointmentDTO appointmentSearch=appointmentService.search(1L);
 
         assertEquals(appointmentSearch.getPatientDTO().getName(),patientName);
     }
 
     @Test
     @Order(3)
-    void searchAll() {
-        if(patientService.searchAll().isEmpty()||patientService.searchAll().isEmpty()) {
+    void searchAll() throws ResourseNotFoundException, ResourseAlreadyExistsExeption {
+        if(dentistRepository.findAll().isEmpty()||patientRepository.findAll().isEmpty()) {
             instanceEntity();
         }
         ObjectMapper mapper=new ObjectMapper();
@@ -131,8 +143,8 @@ class AppointmentServiceImplTest {
 
     @Test
     @Order(4)
-    void modify() {
-        if(patientService.searchAll().isEmpty()||patientService.searchAll().isEmpty()) {
+    void modify() throws ResourseNotFoundException, ResourseAlreadyExistsExeption {
+        if(dentistRepository.findAll().isEmpty()||patientRepository.findAll().isEmpty()) {
             instanceEntity();
         }
         ObjectMapper mapper=new ObjectMapper();
@@ -148,10 +160,10 @@ class AppointmentServiceImplTest {
 
         appointmentService.save(appointmentDTOSave);
 
-        AppointmentDTO notModifiedAppointment=appointmentService.search(3L);
+        AppointmentDTO notModifiedAppointment=appointmentService.search(1L);
 
         Date date=new Date(122,11,9);
-        Long id=3L;
+        Long id=1L;
         String dentistName="Bob";
         AppointmentDTOSave appointmentDTOSave2=new AppointmentDTOSave();
         appointmentDTOSave2.setDentist(dentistEntity);
@@ -162,7 +174,7 @@ class AppointmentServiceImplTest {
 
         appointmentService.modify(appointmentDTOSave2);
 
-        AppointmentDTO modifiedAppointment= appointmentService.search(3L);
+        AppointmentDTO modifiedAppointment= appointmentService.search(1L);
 
         assertNotEquals(modifiedAppointment.getAppointmentDate(),notModifiedAppointment.getAppointmentDate());
         assertEquals(modifiedAppointment.getAppointmentTime(),notModifiedAppointment.getAppointmentTime());
@@ -171,8 +183,8 @@ class AppointmentServiceImplTest {
 
     @Test
     @Order(5)
-    void remove() {
-        if(patientService.searchAll().isEmpty()||patientService.searchAll().isEmpty()) {
+    void remove() throws ResourseNotFoundException, ResourseAlreadyExistsExeption {
+        if(dentistRepository.findAll().isEmpty()||patientRepository.findAll().isEmpty()) {
             instanceEntity();
         }
         ObjectMapper mapper=new ObjectMapper();
@@ -188,13 +200,13 @@ class AppointmentServiceImplTest {
 
         appointmentService.save(appointmentDTOSave);
 
-        Long id=3L;
+        Long id=1L;
 
         AppointmentDTO searchAppointment=appointmentService.search(id);
 
         appointmentService.remove(id);
         assertNotNull(searchAppointment);
-        assertNull(appointmentService.search(id));
+        assertNull(appointmentRepository.findById(id).orElse(null));
 
     }
 }

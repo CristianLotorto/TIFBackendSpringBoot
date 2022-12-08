@@ -4,6 +4,8 @@ import com.project.TFIBackendSpringBoot.dto.PatientDTO;
 import com.project.TFIBackendSpringBoot.dto.PatientDTOSave;
 import com.project.TFIBackendSpringBoot.exceptions.ResourseAlreadyExistsExeption;
 import com.project.TFIBackendSpringBoot.exceptions.ResourseNotFoundException;
+import com.project.TFIBackendSpringBoot.model.Patient;
+import com.project.TFIBackendSpringBoot.repository.IPatientRepository;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
@@ -21,10 +23,12 @@ import static org.junit.jupiter.api.Assertions.*;
 class PatientServiceImplTest {
 
     private PatientServiceImpl patientService;
+    private IPatientRepository patientRepository;
 
     @Autowired
-    public PatientServiceImplTest(PatientServiceImpl patientService){
+    public PatientServiceImplTest(PatientServiceImpl patientService, IPatientRepository patientRepository){
         this.patientService=patientService;
+        this.patientRepository=patientRepository;
     }
 
     public void instanceEntity() throws ResourseAlreadyExistsExeption {
@@ -45,7 +49,7 @@ class PatientServiceImplTest {
     @Order(1)
     void save() throws ResourseNotFoundException, ResourseAlreadyExistsExeption {
 
-        if(patientService.searchAll().isEmpty()){
+        if(patientRepository.findAll().isEmpty()){
             instanceEntity();
         }
 
@@ -58,7 +62,7 @@ class PatientServiceImplTest {
     @Test
     @Order(2)
     void search() throws ResourseNotFoundException, ResourseAlreadyExistsExeption {
-        if(patientService.searchAll().isEmpty()){
+        if(patientRepository.findAll().isEmpty()){
             instanceEntity();
         }
 
@@ -71,7 +75,7 @@ class PatientServiceImplTest {
     @Test
     @Order(3)
     void searchAll() throws ResourseNotFoundException, ResourseAlreadyExistsExeption {
-        if(patientService.searchAll().isEmpty()){
+        if(patientRepository.findAll().isEmpty()){
             instanceEntity();
         }
 
@@ -84,7 +88,7 @@ class PatientServiceImplTest {
     @Test
     @Order(4)
     void modify() throws ResourseNotFoundException, ResourseAlreadyExistsExeption {
-        if(patientService.searchAll().isEmpty()){
+        if(patientRepository.findAll().isEmpty()){
             instanceEntity();
         }
 
@@ -113,7 +117,7 @@ class PatientServiceImplTest {
     @Test
     @Order(5)
     void remove() throws ResourseNotFoundException, ResourseAlreadyExistsExeption {
-        if(patientService.searchAll().isEmpty()){
+        if(patientRepository.findAll().isEmpty()){
             instanceEntity();
         }
 
@@ -122,7 +126,7 @@ class PatientServiceImplTest {
 
             patientService.remove("41235664");
             assertNotNull(searchPatient);
-            assertNull(patientService.search("41235664"));
+            assertNull(patientRepository.findByDNI("41235664"));
 
     }
 }
