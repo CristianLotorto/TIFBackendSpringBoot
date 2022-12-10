@@ -8,6 +8,8 @@ import com.project.TFIBackendSpringBoot.exceptions.ResourseAlreadyExistsExeption
 import com.project.TFIBackendSpringBoot.exceptions.ResourseNotFoundException;
 import com.project.TFIBackendSpringBoot.model.Patient;
 import com.project.TFIBackendSpringBoot.repository.IPatientRepository;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -18,6 +20,8 @@ import java.util.Set;
 
 @Service
 public class PatientServiceImpl implements IPatientService<PatientDTO, PatientDTOSave> {
+
+    private static Logger LOGGER=LogManager.getLogger();
 
     private IPatientRepository patientRepository;
 
@@ -30,6 +34,7 @@ public class PatientServiceImpl implements IPatientService<PatientDTO, PatientDT
     ObjectMapper mapper;
 
     public void savePatient(PatientDTOSave patientDTOSave){
+
         Patient patient=mapper.convertValue(patientDTOSave, Patient.class);
 
         patientRepository.save(patient);
@@ -45,6 +50,7 @@ public class PatientServiceImpl implements IPatientService<PatientDTO, PatientDT
 
         }else{
 
+            LOGGER.info("Exception in Patient SAVE method. Patient with DNI: " + patientDTOSave.getDNI() + " is already loaded in database");
             throw new ResourseAlreadyExistsExeption("Patient with DNI: " + patientDTOSave.getDNI() + " is already loaded in database");
 
         }
@@ -57,6 +63,7 @@ public class PatientServiceImpl implements IPatientService<PatientDTO, PatientDT
             Patient patient=patientRepository.findByDNI(dni);
 
             if (patient==null){
+                LOGGER.error("Exception in Patient REMOVE method. Patient with DNI: " + dni + " doesn't exist in database");
                 throw new ResourseNotFoundException("Patient with DNI: " + dni + " doesn't exist in database");
             }else{
 
@@ -74,6 +81,7 @@ public class PatientServiceImpl implements IPatientService<PatientDTO, PatientDT
         Patient patient= patientRepository.findByDNI(dni);
 
         if (patient==null){
+            LOGGER.error("Exception in Patient SEARCH method. Patient with DNI: " + dni + " doesn't exist in database");
             throw new ResourseNotFoundException("Patient with DNI: " + dni + " doesn't exist in database");
         }else{
 
@@ -93,6 +101,7 @@ public class PatientServiceImpl implements IPatientService<PatientDTO, PatientDT
         List<Patient> patients= patientRepository.findAll();
 
         if (patients.isEmpty()){
+            LOGGER.info("Exception in Patient SEARCHALL method. Patients List is EMPTY");
             throw new ResourseNotFoundException("Patients list is empty");
         }else{
 

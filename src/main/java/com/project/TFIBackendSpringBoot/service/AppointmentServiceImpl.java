@@ -8,6 +8,8 @@ import com.project.TFIBackendSpringBoot.dto.AppointmentDTOSave;
 import com.project.TFIBackendSpringBoot.exceptions.ResourseNotFoundException;
 import com.project.TFIBackendSpringBoot.model.Appointment;
 import com.project.TFIBackendSpringBoot.repository.IAppointmentRepository;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +17,8 @@ import java.util.*;
 
 @Service
 public class AppointmentServiceImpl implements IAppointmentService<AppointmentDTO, AppointmentDTOSave> {
+
+    private static Logger LOGGER= LogManager.getLogger();
 
     private IAppointmentRepository appointmentRepository;
     private DentistServiceImpl dentistService;
@@ -57,6 +61,7 @@ public class AppointmentServiceImpl implements IAppointmentService<AppointmentDT
             appointmentRepository.deleteById(id);
 
         }else{
+            LOGGER.error("Exception in Appointment SEARCHALL method. Appointment with id: "+id+" doesn't exists in database.");
             throw new ResourseNotFoundException("Appointment with id: "+id+" doesn't exists in database");
         }
 
@@ -75,6 +80,8 @@ public class AppointmentServiceImpl implements IAppointmentService<AppointmentDT
 
                 return appointmentDTO;
             }else{
+
+                LOGGER.error("Exception in Appointment SEARCHALL method. Appointment with id: "+id+" doesn't exists in database.");
                 throw new ResourseNotFoundException("Appointment with id: "+id+" doesn't exists in database");
             }
 
@@ -86,7 +93,7 @@ public class AppointmentServiceImpl implements IAppointmentService<AppointmentDT
         Set<AppointmentDTO> appointmentsDTO=new HashSet<>();
 
         if (appointments.isEmpty()) {
-
+            LOGGER.info("Exception in Appointment SEARCHALL method. Appointment List is EMPTY");
             throw new ResourseNotFoundException("Appointments list is empty");
         }else{
 
