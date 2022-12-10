@@ -5,20 +5,22 @@ import com.project.TFIBackendSpringBoot.dto.PatientDTO;
 import com.project.TFIBackendSpringBoot.dto.PatientDTOSave;
 import com.project.TFIBackendSpringBoot.exceptions.ResourseAlreadyExistsExeption;
 import com.project.TFIBackendSpringBoot.exceptions.ResourseNotFoundException;
-import com.project.TFIBackendSpringBoot.model.Patient;
 import com.project.TFIBackendSpringBoot.service.PatientServiceImpl;
 import lombok.AllArgsConstructor;
-import org.springframework.http.HttpStatus;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Set;
+
 
 @AllArgsConstructor
 @RestController
 @RequestMapping("/patient")
 public class PatientController {
 
+    private static Logger LOGGER= LogManager.getLogger();
 
     private final PatientServiceImpl patientService;
 
@@ -32,7 +34,7 @@ public class PatientController {
     public ResponseEntity save(@RequestBody PatientDTOSave patientDTOSave)throws ResourseAlreadyExistsExeption {
 
             patientService.save(patientDTOSave);
-
+            LOGGER.info("Patient CREATED succesfully!");
             return ResponseEntity.ok("Patient SAVED successfully!");
 
     }
@@ -41,18 +43,26 @@ public class PatientController {
     public ResponseEntity search(@PathVariable String dni)throws ResourseNotFoundException {
 
         PatientDTO patientDTO= patientService.search(dni);
-
-        return ResponseEntity.ok("Patient FOUNDED: ");
+        LOGGER.info("Patient FOUNDED succesfully!");
+        return ResponseEntity.ok(patientDTO);
 
     }
 
     @GetMapping("/search/all")
     public ResponseEntity searchAll()throws ResourseNotFoundException{
 
-        patientService.searchAll();
+        Set<PatientDTO> patientsDTO= patientService.searchAll();
+        LOGGER.info("Patients FOUNDED succesfully!");
+        return ResponseEntity.ok(patientsDTO);
 
-        return ResponseEntity.ok("Patients FOUNDED: ");
+    }
 
+    @PutMapping("/modify")
+    public ResponseEntity modify(@RequestBody PatientDTOSave patientDTOSave) throws ResourseNotFoundException {
+        patientService.modify(patientDTOSave);
+
+        LOGGER.info("Patient with DNI: "+patientDTOSave.getDNI()+" MODIFIED successfully!");
+        return ResponseEntity.ok("Patient with DNI: "+patientDTOSave.getDNI()+" MODIFIED successfully!");
     }
 
 
@@ -60,7 +70,7 @@ public class PatientController {
     public ResponseEntity delete(@PathVariable String dni)throws ResourseNotFoundException{
 
             patientService.remove(dni);
-
+            LOGGER.info("Patient DELETED succesfully!");
             return ResponseEntity.ok("Patient DELETED successfully: ");
 
     }

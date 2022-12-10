@@ -115,7 +115,15 @@ public class AppointmentServiceImpl implements IAppointmentService<AppointmentDT
     }
 
     @Override
-    public void modify(AppointmentDTOSave appointmentDTOSave) {
-        saveAppointment(appointmentDTOSave);
+    public void modify(AppointmentDTOSave appointmentDTOSave) throws ResourseNotFoundException {
+
+        Appointment appointment=appointmentRepository.findById(appointmentDTOSave.getId()).orElse(null);
+
+        if (appointment!=null){
+            saveAppointment(appointmentDTOSave);
+        }else{
+            LOGGER.error("Exception in Appointment MODIFY method. Appointment with id: "+appointmentDTOSave.getId()+" doesn't exists in database.");
+            throw new ResourseNotFoundException("Appointment with id: "+appointmentDTOSave.getId()+" doesn't exists in database.");
+        }
     }
 }

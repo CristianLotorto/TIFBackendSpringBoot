@@ -106,7 +106,8 @@ public class DentistServiceImpl implements IDentistService<DentistDTO, DentistDT
        public void modify(DentistDTOSave dentistDTOSave)throws ResourseNotFoundException {
               Dentist dentist=dentistRepository.findByLicense(dentistDTOSave.getLicense());
               if(dentist==null){
-                     throw new ResourseNotFoundException("Exception in Dentist MODIFY method. Dentist with license: " + dentistDTOSave.getLicense() + " doesn't exist in database");
+                     LOGGER.error("Exception in Dentist MODIFY method. Dentist with License: "+dentistDTOSave.getLicense()+" doesn't exists in database.");
+                     throw new ResourseNotFoundException("Dentist with license: " + dentistDTOSave.getLicense() + " doesn't exist in database");
               }else{
 
                      saveDentist(dentistDTOSave);

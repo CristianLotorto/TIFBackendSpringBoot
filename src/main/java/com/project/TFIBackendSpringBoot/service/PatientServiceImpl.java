@@ -117,7 +117,17 @@ public class PatientServiceImpl implements IPatientService<PatientDTO, PatientDT
     }
 
     @Override
-    public void modify(PatientDTOSave patientDTOSave) {
-        savePatient(patientDTOSave);
+    public void modify(PatientDTOSave patientDTOSave) throws ResourseNotFoundException {
+        Patient patient=patientRepository.findByDNI(patientDTOSave.getDNI());
+
+        if (patient!=null){
+
+            savePatient(patientDTOSave);
+
+        }else{
+            LOGGER.error("Exception in Patient MODIFY method. Patient with DNI: "+patientDTOSave.getDNI()+" doesn't exists in database.");
+            throw new ResourseNotFoundException("Patient with DNI: "+patientDTOSave.getDNI()+" doesn't exists in database");
+        }
+
     }
 }
