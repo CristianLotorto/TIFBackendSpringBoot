@@ -4,7 +4,6 @@ import com.project.TFIBackendSpringBoot.dto.PatientDTO;
 import com.project.TFIBackendSpringBoot.dto.PatientDTOSave;
 import com.project.TFIBackendSpringBoot.exceptions.ResourseAlreadyExistsExeption;
 import com.project.TFIBackendSpringBoot.exceptions.ResourseNotFoundException;
-import com.project.TFIBackendSpringBoot.model.Patient;
 import com.project.TFIBackendSpringBoot.repository.IPatientRepository;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
